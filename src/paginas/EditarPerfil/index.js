@@ -7,6 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { atualizarUsuario } from "../../servicos/usuarios";
 import { formatarDataParaInput } from "../../utils/data";
 import fotoPadrao from "../../assets/treina_recife_miniatura.png";
+import { formatarData } from "../../utils/data";
 
 function EditarPerfilUsuario() {
   const navigate = useNavigate();

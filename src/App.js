@@ -8,6 +8,7 @@ function App() {
       <Rotas />
     </AuthProvider>
   );
+  console.log("API em uso:", process.env.REACT_APP_API_URL);
 }
 
 export default App;

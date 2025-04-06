@@ -9,6 +9,7 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
   const [erro, setErro] = useState(null);
   const [carregando, setCarregando] = useState(false);
 
@@ -24,10 +25,7 @@ function Login() {
       const res = await autenticar(email, senha);
       console.log("✅ Usuário autenticado:", res.data);
 
-      // Salva o usuário no localStorage (você pode usar isso pra manter login)
       localStorage.setItem("usuario", JSON.stringify(res.data));
-
-      // Redireciona para o dashboard
       navigate("/dashboard");
     } catch (erro) {
       console.error("❌ Erro de login:", erro);
@@ -60,14 +58,24 @@ function Login() {
 
           <div className="mb-3">
             <label htmlFor="senha" className="form-label">Senha</label>
-            <input
-              type="password"
-              className="form-control"
-              id="senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-            />
+            <div className="input-group">
+              <input
+                type={mostrarSenha ? "text" : "password"}
+                className="form-control"
+                id="senha"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+                tabIndex={-1}
+              >
+                {mostrarSenha ? "Ocultar" : "Mostrar"}
+              </button>
+            </div>
           </div>
 
           <div className="mb-3 form-check">

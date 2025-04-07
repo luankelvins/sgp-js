@@ -21,7 +21,6 @@ function Usuarios() {
           const ordenadoPorId = resposta.data.content.sort((a, b) => a.id - b.id);
           setUsuarios(ordenadoPorId);
         } else {
-          console.warn("Formato inesperado:", resposta.data);
           setUsuarios([]);
         }
       } catch (erro) {
@@ -35,9 +34,8 @@ function Usuarios() {
     carregarUsuarios();
   }, []);
 
-  const handleEditar = (id) => {
-    navigate(`/usuarios/${id}/editar`);
-  };
+  const handleEditar = (id) => navigate(`/usuarios/${id}/editar`);
+  const handleAdicionar = () => navigate("/usuarios/novo");
 
   const handleExcluir = (id) => {
     setUsuarioParaExcluir(id);
@@ -49,16 +47,11 @@ function Usuarios() {
       await excluirUsuario(usuarioParaExcluir);
       setUsuarios((prev) => prev.filter((u) => u.id !== usuarioParaExcluir));
     } catch (erro) {
-      console.error("Erro ao excluir usuário:", erro);
       alert("Erro ao excluir o usuário.");
     } finally {
       setMostrarModalExcluir(false);
       setUsuarioParaExcluir(null);
     }
-  };
-
-  const handleAdicionar = () => {
-    navigate("/usuarios/novo");
   };
 
   return (
@@ -73,7 +66,8 @@ function Usuarios() {
             </button>
           </div>
 
-          <div className="bg-white rounded shadow p-4">
+          {/* Tabela responsiva para desktop */}
+          <div className="bg-white rounded shadow p-3 d-none d-md-block">
             <table className="table table-bordered table-striped text-center mb-0">
               <thead>
                 <tr>
@@ -120,8 +114,42 @@ function Usuarios() {
               </tbody>
             </table>
           </div>
+
+          {/* Layout responsivo para mobile */}
+          <div className="d-block d-md-none">
+            {usuarios.length > 0 ? (
+              usuarios.map((usuario) => (
+                <div key={usuario.id} className="card mb-3">
+                  <div className="card-body">
+                    <h5 className="card-title">{usuario.nome}</h5>
+                    <p className="card-text"><strong>CPF:</strong> {usuario.cpf}</p>
+                    <p className="card-text"><strong>Email:</strong> {usuario.email}</p>
+                    <p className="card-text"><strong>Idade:</strong> {calcularIdade(usuario.dataNascimento)}</p>
+                    <p className="card-text"><strong>Status:</strong> {usuario.status}</p>
+                    <div className="d-flex justify-content-end gap-2">
+                      <button
+                        className="btn btn-sm btn-primary"
+                        onClick={() => handleEditar(usuario.id)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="btn btn-sm btn-danger"
+                        onClick={() => handleExcluir(usuario.id)}
+                      >
+                        Excluir
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-white">Nenhum usuário encontrado.</p>
+            )}
+          </div>
         </section>
       </div>
+
       <Rodape />
 
       {mostrarModalExcluir && (

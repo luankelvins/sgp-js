@@ -36,10 +36,7 @@ function ListarProjetos() {
     carregarDados();
   }, []);
 
-  const handleEditar = (id) => {
-    navigate(`/projetos/${id}/editar`);
-  };
-
+  const handleEditar = (id) => navigate(`/projetos/${id}/editar`);
   const handleAbrirModalExcluir = (id) => {
     setProjetoSelecionado(id);
     setMostrarModal(true);
@@ -67,10 +64,7 @@ function ListarProjetos() {
       <div style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <section className="container py-4">
           <div className="d-flex justify-content-end mb-3">
-            <button
-              className="btn btn-success"
-              onClick={() => navigate("/projetos/novo")}
-            >
+            <button className="btn btn-success" onClick={() => navigate("/projetos/novo")}>
               Adicionar Projeto
             </button>
           </div>
@@ -80,43 +74,37 @@ function ListarProjetos() {
           ) : projetos.length === 0 ? (
             <p className="text-white">Nenhum projeto encontrado.</p>
           ) : (
-            projetos.map((projeto) => {
-              const tarefasDoProjeto = buscarTarefasDoProjeto(projeto.id);
+            <div className="row">
+              {projetos.map((projeto) => {
+                const tarefasDoProjeto = buscarTarefasDoProjeto(projeto.id);
 
-              return (
-                <div key={projeto.id} className="card p-4 mb-4 shadow-sm rounded">
-                  <h5 className="card-title">{projeto.nome}</h5>
-                  <p><strong>Descrição:</strong> {projeto.descricao}</p>
-                  <p><strong>Responsável:</strong> {projeto.responsavel?.nome || "-"}</p>
-                  <div>
-                    <strong>Tarefas:</strong>
-                    {tarefasDoProjeto.length > 0 ? (
-                      <ul className="mt-2">
-                        {tarefasDoProjeto.map((tarefa) => (
-                          <li key={tarefa.id}> {tarefa.titulo}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>-</p>
-                    )}
+                return (
+                  <div key={projeto.id} className="col-md-6 col-lg-4 mb-4">
+                    <div className="card h-100 p-3 shadow-sm rounded">
+                      <h5 className="card-title">{projeto.nome}</h5>
+                      <p><strong>Descrição:</strong> {projeto.descricao}</p>
+                      <p><strong>Responsável:</strong> {projeto.responsavel?.nome || "-"}</p>
+                      <div>
+                        <strong>Tarefas:</strong>
+                        {tarefasDoProjeto.length > 0 ? (
+                          <ul className="mt-2">
+                            {tarefasDoProjeto.map((tarefa) => (
+                              <li key={tarefa.id}>{tarefa.titulo}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p>-</p>
+                        )}
+                      </div>
+                      <div className="d-flex justify-content-end gap-2 mt-auto">
+                        <button className="btn btn-sm btn-primary" onClick={() => handleEditar(projeto.id)}>Editar</button>
+                        <button className="btn btn-sm btn-danger" onClick={() => handleAbrirModalExcluir(projeto.id)}>Excluir</button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="d-flex justify-content-end gap-2 mt-3">
-                    <button
-                      className="btn btn-sm btn-primary"
-                      onClick={() => handleEditar(projeto.id)}
-                    >
-                      Editar
-                    </button>
-                    <button
-                      className="btn btn-sm btn-danger"
-                      onClick={() => handleAbrirModalExcluir(projeto.id)}
-                    >
-                      Excluir
-                    </button>
-                  </div>
-                </div>
-              );
-            })
+                );
+              })}
+            </div>
           )}
         </section>
       </div>

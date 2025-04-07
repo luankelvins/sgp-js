@@ -81,14 +81,14 @@ const ListaTarefas = () => {
       <Cabecalho />
       <section style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <div className="container py-4">
-          <div className="d-flex justify-content-between align-items-end mb-3">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-3 gap-3">
             <button className="btn btn-success" onClick={handleAdicionarTarefa}>
               Adicionar Tarefa
             </button>
 
-            <div className="row w-75 text-white">
-              <div className="col-md-4 d-flex align-items-center">
-                <label className="me-2">Status:</label>
+            <div className="row w-100 text-white g-2">
+              <div className="col-12 col-md-4 d-flex flex-column flex-md-row align-items-md-center">
+                <label className="me-md-2 mb-1 mb-md-0">Status:</label>
                 <select className="form-select form-select-sm" value={filtroStatus} onChange={(e) => setFiltroStatus(e.target.value)}>
                   <option value="">Todos</option>
                   <option value="PENDENTE">PENDENTE</option>
@@ -97,8 +97,8 @@ const ListaTarefas = () => {
                 </select>
               </div>
 
-              <div className="col-md-4 d-flex align-items-center">
-                <label className="me-2">Projeto:</label>
+              <div className="col-12 col-md-4 d-flex flex-column flex-md-row align-items-md-center">
+                <label className="me-md-2 mb-1 mb-md-0">Projeto:</label>
                 <select className="form-select form-select-sm" value={filtroProjeto} onChange={(e) => setFiltroProjeto(e.target.value)}>
                   <option value="">Todos</option>
                   {projetos.map((projeto) => (
@@ -107,8 +107,8 @@ const ListaTarefas = () => {
                 </select>
               </div>
 
-              <div className="col-md-4 d-flex align-items-center">
-                <label className="me-2">Prioridade:</label>
+              <div className="col-12 col-md-4 d-flex flex-column flex-md-row align-items-md-center">
+                <label className="me-md-2 mb-1 mb-md-0">Prioridade:</label>
                 <select className="form-select form-select-sm" value={filtroPrioridade} onChange={(e) => setFiltroPrioridade(e.target.value)}>
                   <option value="">Todas</option>
                   <option value="ALTA">ALTA</option>
@@ -119,7 +119,7 @@ const ListaTarefas = () => {
             </div>
           </div>
 
-          <div className="d-flex justify-content-end gap-2 mb-4">
+          <div className="d-flex flex-column flex-sm-row justify-content-end gap-2 mb-4">
             <button className="btn btn-primary btn-sm" onClick={aplicarFiltros}>Filtrar</button>
             <button className="btn btn-secondary btn-sm" onClick={limparFiltros}>Limpar</button>
           </div>
@@ -127,11 +127,7 @@ const ListaTarefas = () => {
           {tarefas.length > 0 ? (
             tarefas.map((tarefa) => {
               const tempoGasto = (() => {
-                if (
-                  tarefa.status === "FINALIZADA" &&
-                  tarefa.dataCriacao &&
-                  tarefa.dataConclusao
-                ) {
+                if (tarefa.status === "FINALIZADA" && tarefa.dataCriacao && tarefa.dataConclusao) {
                   const inicio = new Date(tarefa.dataCriacao);
                   const fim = new Date(tarefa.dataConclusao);
                   const diff = fim - inicio;
@@ -143,7 +139,7 @@ const ListaTarefas = () => {
               })();
 
               return (
-                <div key={tarefa.id} className="card p-4 mb-4 shadow-sm rounded">
+                <div key={tarefa.id} className="card p-3 p-md-4 mb-4 shadow-sm rounded">
                   <h5>{tarefa.titulo}</h5>
                   <p><strong>Prioridade:</strong> {tarefa.prioridade}</p>
                   <p><strong>Status:</strong> {tarefa.status}</p>
@@ -153,7 +149,7 @@ const ListaTarefas = () => {
                   <p><strong>Responsável:</strong> {tarefa.usuario?.nome || "-"}</p>
                   {tempoGasto && <p><strong>Tempo Gasto:</strong> {tempoGasto}</p>}
 
-                  <div className="d-flex justify-content-end gap-2">
+                  <div className="d-flex flex-column flex-sm-row justify-content-end gap-2">
                     <button className="btn btn-sm btn-primary" onClick={() => handleEditar(tarefa.id)}>Editar</button>
                     <button className="btn btn-sm btn-danger" onClick={() => handleExcluir(tarefa.id)}>Excluir</button>
                   </div>

@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/sgp_logo_vertical.png";
 import './login.css';
 import { autenticar } from "../../servicos/usuarios";
+import { AuthContext } from "../../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -18,14 +20,11 @@ function Login() {
     setCarregando(true);
     setErro(null);
 
-    const dados = { email, senha };
-    console.log("📤 Enviando:", dados);
-
     try {
       const res = await autenticar(email, senha);
       console.log("✅ Usuário autenticado:", res.data);
 
-      localStorage.setItem("usuario", JSON.stringify(res.data));
+      login(res.data); // AuthContext
       navigate("/dashboard");
     } catch (erro) {
       console.error("❌ Erro de login:", erro);

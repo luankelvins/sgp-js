@@ -4,7 +4,6 @@ import Rodape from "../../componentes/Rodape";
 import Cabecalho from "../../componentes/Cabecalho";
 import Modal from "../../componentes/Modal";
 import { formatarData } from "../../utils/data";
-import { listarUsuarios } from "../../servicos/usuarios";
 import { listarProjetos } from "../../servicos/projetos";
 import { salvarTarefa } from "../../servicos/tarefas";
 
@@ -20,8 +19,8 @@ function Tarefas() {
   const [usuarioId, setUsuarioId] = useState("");
   const [projetoId, setProjetoId] = useState("");
 
-  const [usuarios, setUsuarios] = useState([]);
   const [projetos, setProjetos] = useState([]);
+  const [usuarioNome, setUsuarioNome] = useState("");
 
   const [lembreteAtivado, setLembreteAtivado] = useState(false);
   const [tempoAntes, setTempoAntes] = useState("");
@@ -31,26 +30,34 @@ function Tarefas() {
   useEffect(() => {
     const carregarDados = async () => {
       try {
-        const resUsuarios = await listarUsuarios();
         const resProjetos = await listarProjetos();
-
-        const listaUsuarios = Array.isArray(resUsuarios.data)
-          ? resUsuarios.data
-          : resUsuarios.data.content || [];
-
         const listaProjetos = Array.isArray(resProjetos.data)
           ? resProjetos.data
           : resProjetos.data.content || [];
 
-        setUsuarios(listaUsuarios);
         setProjetos(listaProjetos);
       } catch (error) {
-        alert("Erro ao carregar dados: " + error.message);
+        alert("Erro ao carregar projetos: " + error.message);
       }
     };
 
     carregarDados();
   }, []);
+
+  // Quando o projeto muda, define o responsável automaticamente
+  const handleProjetoChange = (e) => {
+    const id = e.target.value;
+    setProjetoId(id);
+
+    const projetoSelecionado = projetos.find((p) => p.id === parseInt(id));
+    if (projetoSelecionado && projetoSelecionado.responsavel) {
+      setUsuarioId(projetoSelecionado.responsavel.id);
+      setUsuarioNome(projetoSelecionado.responsavel.nome);
+    } else {
+      setUsuarioId("");
+      setUsuarioNome("");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -171,19 +178,13 @@ function Tarefas() {
 
             <div className="row mb-4">
               <div className="col-md-6">
-                <label htmlFor="usuario" className="form-label">Responsável:</label>
-                <select
-                  id="usuario"
+                <label className="form-label">Responsável:</label>
+                <input
+                  type="text"
                   className="form-control"
-                  value={usuarioId}
-                  onChange={(e) => setUsuarioId(e.target.value)}
-                  required
-                >
-                  <option value="" disabled>Selecione o responsável</option>
-                  {usuarios.map((u) => (
-                    <option key={u.id} value={u.id}>{u.nome}</option>
-                  ))}
-                </select>
+                  value={usuarioNome}
+                  readOnly
+                />
               </div>
               <div className="col-md-6">
                 <label htmlFor="projeto" className="form-label">Projeto:</label>
@@ -191,7 +192,7 @@ function Tarefas() {
                   id="projeto"
                   className="form-control"
                   value={projetoId}
-                  onChange={(e) => setProjetoId(e.target.value)}
+                  onChange={handleProjetoChange}
                   required
                 >
                   <option value="" disabled>Selecione o projeto</option>

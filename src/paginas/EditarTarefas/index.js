@@ -61,7 +61,7 @@ function EditarTarefa() {
 
       setTarefa((prev) => ({
         ...prev,
-        projetoId: value,
+        projetoId: parseInt(value),
         usuarioId: responsavel.id || "",
         usuarioNome: responsavel.nome || "",
       }));
@@ -74,7 +74,7 @@ function EditarTarefa() {
     e.preventDefault();
 
     const projetoSelecionado = projetos.find(
-      (p) => p.id === parseInt(tarefa.projetoId)
+      (p) => p.id === tarefa.projetoId
     );
     const responsavel = projetoSelecionado?.responsavel;
 
@@ -86,10 +86,8 @@ function EditarTarefa() {
     const payload = {
       id: tarefa.id,
       titulo: tarefa.titulo,
-      dataCriacao: formatarData(tarefa.dataCriacao),
-      dataConclusao: tarefa.dataConclusao
-        ? formatarData(tarefa.dataConclusao)
-        : null,
+      dataCriacao: tarefa.dataCriacao,
+      dataConclusao: tarefa.dataConclusao || null,
       prioridade: tarefa.prioridade,
       status: tarefa.status,
       usuario: { id: parseInt(responsavel.id) },

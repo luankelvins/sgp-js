@@ -5,8 +5,7 @@ import Cabecalho from "../../componentes/Cabecalho";
 import Rodape from "../../componentes/Rodape";
 import Modal from "../../componentes/Modal";
 import { listarProjetos } from "../../servicos/projetos";
-import { listarTarefas } from "../../servicos/tarefas";
-import { excluirTarefa } from "../../servicos/tarefas";
+import { listarTarefas, excluirTarefa } from "../../servicos/tarefas";
 
 const ListaTarefas = () => {
   const navigate = useNavigate();
@@ -18,7 +17,8 @@ const ListaTarefas = () => {
   const [filtroProjeto, setFiltroProjeto] = useState("");
   const [filtroPrioridade, setFiltroPrioridade] = useState("");
   const [tarefaSelecionada, setTarefaSelecionada] = useState(null);
-  const [mostrarModal, setMostrarModal] = useState(false);
+  const [mostrarModalConfirmacao, setMostrarModalConfirmacao] = useState(false);
+  const [mostrarModalSucesso, setMostrarModalSucesso] = useState(false);
 
   useEffect(() => {
     async function carregarDados() {
@@ -49,21 +49,22 @@ const ListaTarefas = () => {
 
   const handleAdicionarTarefa = () => navigate("/tarefas/novo");
   const handleEditar = (id) => navigate(`/tarefas/${id}/editar`);
+
   const handleExcluir = (id) => {
     setTarefaSelecionada(id);
-    setMostrarModal(true);
+    setMostrarModalConfirmacao(true);
   };
 
   const confirmarExclusao = async () => {
     try {
       await excluirTarefa(tarefaSelecionada);
-  
+
       const novaLista = tarefas.filter((t) => t.id !== tarefaSelecionada);
       setTarefas(novaLista);
       setTarefasOriginais(novaLista);
-  
-      setMostrarModal(false);
-      setTarefaSelecionada(null);
+
+      setMostrarModalConfirmacao(false);
+      setMostrarModalSucesso(true);
     } catch (erro) {
       console.error("Erro ao excluir tarefa:", erro);
       alert("Erro ao excluir a tarefa.");
@@ -173,15 +174,26 @@ const ListaTarefas = () => {
 
       <Rodape />
 
-      {mostrarModal && (
+      {/* Modal de confirmação de exclusão */}
+      {mostrarModalConfirmacao && (
         <Modal
           titulo="Confirmar Exclusão"
           texto="Deseja realmente excluir esta tarefa?"
           txtBtn1="Sim, excluir"
           txtBtn2="Cancelar"
           onClickBtn1={confirmarExclusao}
-          onClickBtn2={() => setMostrarModal(false)}
-          onClickBtnClose={() => setMostrarModal(false)}
+          onClickBtn2={() => setMostrarModalConfirmacao(false)}
+          onClickBtnClose={() => setMostrarModalConfirmacao(false)}
+        />
+      )}
+
+      {/* Modal de sucesso após excluir */}
+      {mostrarModalSucesso && (
+        <Modal
+          titulo="Tarefa Excluída"
+          texto="A tarefa foi excluída com sucesso!"
+          txtBtn1="OK"
+          onClickBtn1={() => setMostrarModalSucesso(false)}
         />
       )}
     </>

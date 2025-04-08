@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Cabecalho from "../../componentes/Cabecalho";
 import Rodape from "../../componentes/Rodape";
 import Modal from "../../componentes/Modal";
-import { listarTarefas } from "../../servicos/tarefas";
 import { listarProjetos } from "../../servicos/projetos";
+import { listarTarefas } from "../../servicos/tarefas";
+import { excluirTarefa } from "../../servicos/tarefas";
 
 const ListaTarefas = () => {
   const navigate = useNavigate();

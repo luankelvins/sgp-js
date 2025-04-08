@@ -182,6 +182,7 @@ function Tarefas() {
                 <input
                   type="text"
                   className="form-control"
+                  style={{ backgroundColor: "#e9ecef" }}
                   value={usuarioNome}
                   readOnly
                 />

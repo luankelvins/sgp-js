@@ -86,7 +86,7 @@ function EditarTarefa() {
     const payload = {
       id: tarefa.id,
       titulo: tarefa.titulo,
-      dataCriacao: tarefa.dataCriacao,
+      dataCriacao: tarefa.dataCriacao, // Mantém formato original do backend
       dataConclusao: tarefa.dataConclusao || null,
       prioridade: tarefa.prioridade,
       status: tarefa.status,

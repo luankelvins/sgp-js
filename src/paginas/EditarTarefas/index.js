@@ -34,6 +34,7 @@ function EditarTarefa() {
         setTarefa({
           id: tarefaData.id,
           titulo: tarefaData.titulo,
+          descricao: tarefaData.descricao || "",
           dataCriacao: tarefaData.dataCriacao,
           dataCriacaoFormatada: formatarData(tarefaData.dataCriacao),
           dataConclusao: tarefaData.dataConclusao || "",
@@ -86,14 +87,14 @@ function EditarTarefa() {
     const payload = {
       id: tarefa.id,
       titulo: tarefa.titulo,
-      descricao: tarefa.descricao || "", // mesmo que seja vazio
+      descricao: tarefa.descricao || "",
       dataCriacao: tarefa.dataCriacao,
       dataConclusao: tarefa.dataConclusao || null,
       prioridade: tarefa.prioridade,
       status: tarefa.status,
-      qtdeDiasTrabalhados: 0, // ou calcule se necessário
-      usuario: { id: parseInt(responsavel.id) },
-      projeto: { id: parseInt(projetoSelecionado.id) },
+      qtdeDiasTrabalhados: 0,
+      usuario: { id: parseInt(tarefa.usuarioId) },
+      projeto: { id: parseInt(tarefa.projetoId) },
     };
 
     console.log("📤 Payload enviado para o backend:", payload);
@@ -126,10 +127,7 @@ function EditarTarefa() {
   return (
     <>
       <Cabecalho />
-      <section
-        className="container-fluid py-5"
-        style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}
-      >
+      <section className="container-fluid py-5" style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <div className="container col-md-6 bg-white text-dark p-4 rounded shadow">
           <h2 className="mb-4 text-center">Editar Tarefa</h2>
           <form onSubmit={handleSubmit}>
@@ -143,6 +141,18 @@ function EditarTarefa() {
                 value={tarefa.titulo}
                 onChange={handleChange}
                 required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="descricao" className="form-label">Descrição</label>
+              <input
+                id="descricao"
+                type="text"
+                className="form-control"
+                name="descricao"
+                value={tarefa.descricao}
+                onChange={handleChange}
               />
             </div>
 

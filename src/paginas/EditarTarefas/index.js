@@ -86,10 +86,12 @@ function EditarTarefa() {
     const payload = {
       id: tarefa.id,
       titulo: tarefa.titulo,
-      dataCriacao: tarefa.dataCriacao, // Mantém formato original do backend
+      descricao: tarefa.descricao || "", // mesmo que seja vazio
+      dataCriacao: tarefa.dataCriacao,
       dataConclusao: tarefa.dataConclusao || null,
       prioridade: tarefa.prioridade,
       status: tarefa.status,
+      qtdeDiasTrabalhados: 0, // ou calcule se necessário
       usuario: { id: parseInt(responsavel.id) },
       projeto: { id: parseInt(projetoSelecionado.id) },
     };

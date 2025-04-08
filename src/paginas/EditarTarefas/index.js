@@ -54,20 +54,7 @@ function EditarTarefa() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "projetoId") {
-      const projeto = projetos.find((p) => p.id === parseInt(value));
-      const responsavel = projeto?.responsavel || {};
-
-      setTarefa((prev) => ({
-        ...prev,
-        projetoId: value,
-        usuarioId: responsavel.id || "",
-        usuarioNome: responsavel.nome || "",
-      }));
-    } else {
-      setTarefa((prev) => ({ ...prev, [name]: value }));
-    }
+    setTarefa((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -220,8 +207,8 @@ function EditarTarefa() {
                   name="projetoId"
                   className="form-control"
                   value={tarefa.projetoId}
-                  onChange={handleChange}
-                  required
+                  disabled
+                  style={{ backgroundColor: "#e9ecef" }}
                 >
                   <option value="">Selecione</option>
                   {projetos.map((p) => (

@@ -53,12 +53,20 @@ const ListaTarefas = () => {
     setMostrarModal(true);
   };
 
-  const confirmarExclusao = () => {
-    const novaLista = tarefas.filter((t) => t.id !== tarefaSelecionada);
-    setTarefas(novaLista);
-    setTarefasOriginais(novaLista);
-    setMostrarModal(false);
-    setTarefaSelecionada(null);
+  const confirmarExclusao = async () => {
+    try {
+      await excluirTarefa(tarefaSelecionada);
+  
+      const novaLista = tarefas.filter((t) => t.id !== tarefaSelecionada);
+      setTarefas(novaLista);
+      setTarefasOriginais(novaLista);
+  
+      setMostrarModal(false);
+      setTarefaSelecionada(null);
+    } catch (erro) {
+      console.error("Erro ao excluir tarefa:", erro);
+      alert("Erro ao excluir a tarefa.");
+    }
   };
 
   const aplicarFiltros = () => {

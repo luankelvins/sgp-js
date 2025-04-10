@@ -59,17 +59,17 @@ function Usuarios() {
       <Cabecalho />
       <div style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <section className="container py-5">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h1 className="text-white mb-0">Usuários Cadastrados</h1>
-            <button className="btn btn-success" onClick={handleAdicionar}>
-              Adicionar Usuário
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h2 className="text-white fw-bold">Usuários Cadastrados</h2>
+            <button className="btn btn-success btn-lg" onClick={handleAdicionar}>
+              + Novo Usuário
             </button>
           </div>
 
-          {/* Tabela responsiva para desktop */}
+          {/* Tabela para desktop */}
           <div className="bg-white rounded shadow p-3 d-none d-md-block">
-            <table className="table table-bordered table-striped text-center mb-0">
-              <thead>
+            <table className="table table-striped table-hover table-bordered align-middle mb-0">
+              <thead className="table-dark text-center">
                 <tr>
                   <th>ID</th>
                   <th>NOME</th>
@@ -83,22 +83,26 @@ function Usuarios() {
               <tbody>
                 {usuarios.length > 0 ? (
                   usuarios.map((usuario) => (
-                    <tr key={usuario.id}>
+                    <tr key={usuario.id} className="text-center">
                       <td>{usuario.id}</td>
-                      <td>{usuario.nome}</td>
+                      <td className="text-start">{usuario.nome}</td>
                       <td>{usuario.cpf}</td>
                       <td>{usuario.email}</td>
                       <td>{calcularIdade(usuario.dataNascimento)}</td>
-                      <td>{usuario.status}</td>
+                      <td>
+                        <span className={`badge ${usuario.status === "ATIVO" ? "bg-success" : "bg-secondary"}`}>
+                          {usuario.status}
+                        </span>
+                      </td>
                       <td>
                         <button
-                          className="btn btn-sm btn-primary me-2"
+                          className="btn btn-sm btn-outline-primary me-2"
                           onClick={() => handleEditar(usuario.id)}
                         >
                           Editar
                         </button>
                         <button
-                          className="btn btn-sm btn-danger"
+                          className="btn btn-sm btn-outline-danger"
                           onClick={() => handleExcluir(usuario.id)}
                         >
                           Excluir
@@ -108,33 +112,38 @@ function Usuarios() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7">Nenhum usuário encontrado.</td>
+                    <td colSpan="7" className="text-center">Nenhum usuário encontrado.</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
 
-          {/* Layout responsivo para mobile */}
-          <div className="d-block d-md-none">
+          {/* Cards para mobile */}
+          <div className="d-block d-md-none mt-3">
             {usuarios.length > 0 ? (
               usuarios.map((usuario) => (
-                <div key={usuario.id} className="card mb-3">
+                <div key={usuario.id} className="card mb-3 shadow-sm border-0">
                   <div className="card-body">
-                    <h5 className="card-title">{usuario.nome}</h5>
-                    <p className="card-text"><strong>CPF:</strong> {usuario.cpf}</p>
-                    <p className="card-text"><strong>Email:</strong> {usuario.email}</p>
-                    <p className="card-text"><strong>Idade:</strong> {calcularIdade(usuario.dataNascimento)}</p>
-                    <p className="card-text"><strong>Status:</strong> {usuario.status}</p>
-                    <div className="d-flex justify-content-end gap-2">
+                    <h5 className="card-title fw-bold text-primary">{usuario.nome}</h5>
+                    <p><strong>CPF:</strong> {usuario.cpf}</p>
+                    <p><strong>Email:</strong> {usuario.email}</p>
+                    <p><strong>Idade:</strong> {calcularIdade(usuario.dataNascimento)}</p>
+                    <p>
+                      <strong>Status:</strong>{" "}
+                      <span className={`badge ${usuario.status === "ATIVO" ? "bg-success" : "bg-secondary"}`}>
+                        {usuario.status}
+                      </span>
+                    </p>
+                    <div className="d-flex justify-content-end gap-2 mt-3">
                       <button
-                        className="btn btn-sm btn-primary"
+                        className="btn btn-sm btn-outline-primary"
                         onClick={() => handleEditar(usuario.id)}
                       >
                         Editar
                       </button>
                       <button
-                        className="btn btn-sm btn-danger"
+                        className="btn btn-sm btn-outline-danger"
                         onClick={() => handleExcluir(usuario.id)}
                       >
                         Excluir

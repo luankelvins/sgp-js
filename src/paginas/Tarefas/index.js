@@ -44,7 +44,6 @@ function Tarefas() {
     carregarDados();
   }, []);
 
-  // Quando o projeto muda, define o responsável automaticamente
   const handleProjetoChange = (e) => {
     const id = e.target.value;
     setProjetoId(id);
@@ -90,10 +89,10 @@ function Tarefas() {
       <Cabecalho />
       <section className="container-fluid py-5" style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <div className="container col-md-6 bg-white text-dark p-4 rounded shadow">
-          <h2 className="mb-4 text-center">Adicionar Nova Tarefa</h2>
+          <h2 className="mb-4 text-center fw-bold text-primary">Adicionar Nova Tarefa</h2>
 
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
+            <div className="mb-3">
               <label htmlFor="titulo" className="form-label">Título:</label>
               <input
                 id="titulo"
@@ -106,7 +105,7 @@ function Tarefas() {
               />
             </div>
 
-            <div className="mb-4">
+            <div className="mb-3">
               <label htmlFor="descricao" className="form-label">Descrição:</label>
               <input
                 id="descricao"
@@ -118,7 +117,7 @@ function Tarefas() {
               />
             </div>
 
-            <div className="row mb-4">
+            <div className="row mb-3">
               <div className="col-md-6">
                 <label htmlFor="dataCriacao" className="form-label">Data de Criação:</label>
                 <input
@@ -143,12 +142,12 @@ function Tarefas() {
               </div>
             </div>
 
-            <div className="row mb-4">
+            <div className="row mb-3">
               <div className="col-md-6">
                 <label htmlFor="prioridade" className="form-label">Prioridade:</label>
                 <select
                   id="prioridade"
-                  className="form-control"
+                  className="form-select"
                   value={prioridade}
                   onChange={(e) => setPrioridade(e.target.value)}
                   required
@@ -163,7 +162,7 @@ function Tarefas() {
                 <label htmlFor="status" className="form-label">Status:</label>
                 <select
                   id="status"
-                  className="form-control"
+                  className="form-select"
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                   required
@@ -176,7 +175,7 @@ function Tarefas() {
               </div>
             </div>
 
-            <div className="row mb-4">
+            <div className="row mb-3">
               <div className="col-md-6">
                 <label className="form-label">Responsável:</label>
                 <input
@@ -191,7 +190,7 @@ function Tarefas() {
                 <label htmlFor="projeto" className="form-label">Projeto:</label>
                 <select
                   id="projeto"
-                  className="form-control"
+                  className="form-select"
                   value={projetoId}
                   onChange={handleProjetoChange}
                   required
@@ -205,11 +204,11 @@ function Tarefas() {
             </div>
 
             {lembreteAtivado && (
-              <div className="mb-4">
+              <div className="mb-3">
                 <label htmlFor="tempoAntes" className="form-label">Lembrete: Quanto tempo antes?</label>
                 <select
                   id="tempoAntes"
-                  className="form-control"
+                  className="form-select"
                   value={tempoAntes}
                   onChange={(e) => setTempoAntes(e.target.value)}
                 >
@@ -239,7 +238,7 @@ function Tarefas() {
             </button>
             <button
               type="button"
-              className="btn btn-danger w-100"
+              className="btn btn-outline-danger w-100"
               onClick={handleCancelar}
             >
               Cancelar

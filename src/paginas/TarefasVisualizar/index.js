@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import Cabecalho from "../../componentes/Cabecalho";
 import Rodape from "../../componentes/Rodape";
@@ -90,46 +89,45 @@ const ListaTarefas = () => {
     <>
       <Cabecalho />
       <section style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
-        <div className="container py-4">
-          <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-3 gap-3">
-            <button className="btn btn-success" onClick={handleAdicionarTarefa}>
-              Adicionar Tarefa
+        <div className="container py-5">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h2 className="text-white fw-bold">Lista de Tarefas</h2>
+            <button className="btn btn-success btn-lg" onClick={handleAdicionarTarefa}>
+              + Nova Tarefa
             </button>
+          </div>
 
-            <div className="row w-100 text-white g-2">
-              <div className="col-12 col-md-4 d-flex flex-column flex-md-row align-items-md-center">
-                <label className="me-md-2 mb-1 mb-md-0">Status:</label>
-                <select className="form-select form-select-sm" value={filtroStatus} onChange={(e) => setFiltroStatus(e.target.value)}>
-                  <option value="">Todos</option>
-                  <option value="PENDENTE">PENDENTE</option>
-                  <option value="FAZENDO">FAZENDO</option>
-                  <option value="FINALIZADA">FINALIZADA</option>
-                </select>
-              </div>
-
-              <div className="col-12 col-md-4 d-flex flex-column flex-md-row align-items-md-center">
-                <label className="me-md-2 mb-1 mb-md-0">Projeto:</label>
-                <select className="form-select form-select-sm" value={filtroProjeto} onChange={(e) => setFiltroProjeto(e.target.value)}>
-                  <option value="">Todos</option>
-                  {projetos.map((projeto) => (
-                    <option key={projeto.id} value={projeto.nome}>{projeto.nome}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="col-12 col-md-4 d-flex flex-column flex-md-row align-items-md-center">
-                <label className="me-md-2 mb-1 mb-md-0">Prioridade:</label>
-                <select className="form-select form-select-sm" value={filtroPrioridade} onChange={(e) => setFiltroPrioridade(e.target.value)}>
-                  <option value="">Todas</option>
-                  <option value="ALTA">ALTA</option>
-                  <option value="MEDIA">MEDIA</option>
-                  <option value="BAIXA">BAIXA</option>
-                </select>
-              </div>
+          <div className="row g-3 mb-4 text-white">
+            <div className="col-md-4">
+              <label>Status</label>
+              <select className="form-select form-select-sm" value={filtroStatus} onChange={(e) => setFiltroStatus(e.target.value)}>
+                <option value="">Todos</option>
+                <option value="PENDENTE">PENDENTE</option>
+                <option value="FAZENDO">FAZENDO</option>
+                <option value="FINALIZADA">FINALIZADA</option>
+              </select>
+            </div>
+            <div className="col-md-4">
+              <label>Projeto</label>
+              <select className="form-select form-select-sm" value={filtroProjeto} onChange={(e) => setFiltroProjeto(e.target.value)}>
+                <option value="">Todos</option>
+                {projetos.map((projeto) => (
+                  <option key={projeto.id} value={projeto.nome}>{projeto.nome}</option>
+                ))}
+              </select>
+            </div>
+            <div className="col-md-4">
+              <label>Prioridade</label>
+              <select className="form-select form-select-sm" value={filtroPrioridade} onChange={(e) => setFiltroPrioridade(e.target.value)}>
+                <option value="">Todas</option>
+                <option value="ALTA">ALTA</option>
+                <option value="MEDIA">MEDIA</option>
+                <option value="BAIXA">BAIXA</option>
+              </select>
             </div>
           </div>
 
-          <div className="d-flex flex-column flex-sm-row justify-content-end gap-2 mb-4">
+          <div className="d-flex flex-wrap justify-content-end gap-2 mb-4">
             <button className="btn btn-primary btn-sm" onClick={aplicarFiltros}>Filtrar</button>
             <button className="btn btn-secondary btn-sm" onClick={limparFiltros}>Limpar</button>
           </div>
@@ -149,32 +147,33 @@ const ListaTarefas = () => {
               })();
 
               return (
-                <div key={tarefa.id} className="card p-3 p-md-4 mb-4 shadow-sm rounded">
-                  <h5>{tarefa.titulo}</h5>
-                  <p><strong>Prioridade:</strong> {tarefa.prioridade}</p>
-                  <p><strong>Status:</strong> {tarefa.status}</p>
-                  <p><strong>Data de Criação:</strong> {tarefa.dataCriacao}</p>
-                  <p><strong>Data de Conclusão:</strong> {tarefa.dataConclusao || "-"}</p>
-                  <p><strong>Projeto:</strong> {tarefa.projeto?.nome || "-"}</p>
-                  <p><strong>Responsável:</strong> {tarefa.usuario?.nome || "-"}</p>
-                  {tempoGasto && <p><strong>Tempo Gasto:</strong> {tempoGasto}</p>}
+                <div key={tarefa.id} className="card mb-4 shadow-sm border-0">
+                  <div className="card-body">
+                    <h5 className="card-title text-primary fw-bold">{tarefa.titulo}</h5>
+                    <p><strong>Prioridade:</strong> {tarefa.prioridade}</p>
+                    <p><strong>Status:</strong> {tarefa.status}</p>
+                    <p><strong>Data de Criação:</strong> {tarefa.dataCriacao}</p>
+                    <p><strong>Data de Conclusão:</strong> {tarefa.dataConclusao || "-"}</p>
+                    <p><strong>Projeto:</strong> {tarefa.projeto?.nome || "-"}</p>
+                    <p><strong>Responsável:</strong> {tarefa.usuario?.nome || "-"}</p>
+                    {tempoGasto && <p><strong>Tempo Gasto:</strong> {tempoGasto}</p>}
 
-                  <div className="d-flex flex-column flex-sm-row justify-content-end gap-2">
-                    <button className="btn btn-sm btn-primary" onClick={() => handleEditar(tarefa.id)}>Editar</button>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleExcluir(tarefa.id)}>Excluir</button>
+                    <div className="d-flex justify-content-end gap-2 mt-3">
+                      <button className="btn btn-sm btn-outline-primary" onClick={() => handleEditar(tarefa.id)}>Editar</button>
+                      <button className="btn btn-sm btn-outline-danger" onClick={() => handleExcluir(tarefa.id)}>Excluir</button>
+                    </div>
                   </div>
                 </div>
               );
             })
           ) : (
-            <p className="text-white">Nenhuma tarefa encontrada.</p>
+            <p className="text-white text-center">Nenhuma tarefa encontrada.</p>
           )}
         </div>
       </section>
 
       <Rodape />
 
-      {/* Modal de confirmação de exclusão */}
       {mostrarModalConfirmacao && (
         <Modal
           titulo="Confirmar Exclusão"
@@ -187,7 +186,6 @@ const ListaTarefas = () => {
         />
       )}
 
-      {/* Modal de sucesso após excluir */}
       {mostrarModalSucesso && (
         <Modal
           titulo="Tarefa Excluída"

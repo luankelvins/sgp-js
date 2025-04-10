@@ -1,4 +1,5 @@
 import miniatura from '../../assets/treina_recife_miniatura.png';
+import { Link } from 'react-router-dom';
 
 function Rodape() {
     return (

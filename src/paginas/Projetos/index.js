@@ -87,11 +87,47 @@ function ListarProjetos() {
                       <div>
                         <strong>Tarefas:</strong>
                         {tarefasDoProjeto.length > 0 ? (
-                          <ul className="mt-2">
-                            {tarefasDoProjeto.map((tarefa) => (
-                              <li key={tarefa.id}>{tarefa.titulo}</li>
-                            ))}
-                          </ul>
+                          <div className="table-responsive mt-2">
+                            <table className="table table-sm table-bordered">
+                              <thead className="table-light">
+                                <tr>
+                                  <th>ID</th>
+                                  <th>Título</th>
+                                  <th>Descrição</th>
+                                  <th>Responsável</th>
+                                  <th>Data de Criação</th>
+                                  <th>Status</th>
+                                  <th>Ações</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {tarefasDoProjeto.map((tarefa) => (
+                                  <tr key={tarefa.id}>
+                                    <td>{tarefa.id}</td>
+                                    <td>{tarefa.titulo}</td>
+                                    <td>{tarefa.descricao || "-"}</td>
+                                    <td>{tarefa.usuario?.nome || "-"}</td>
+                                    <td>{tarefa.dataCriacao}</td>
+                                    <td>{tarefa.status}</td>
+                                    <td>
+                                      <button
+                                        className="btn btn-sm btn-primary me-1"
+                                        onClick={() => navigate(`/tarefas/${tarefa.id}/editar`)}
+                                      >
+                                        Editar
+                                      </button>
+                                      <button
+                                        className="btn btn-sm btn-danger"
+                                        onClick={() => alert(`Excluir tarefa ${tarefa.id}`)}
+                                      >
+                                        Excluir
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
                         ) : (
                           <p>-</p>
                         )}

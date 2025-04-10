@@ -12,9 +12,6 @@ import {
   Legend,
 } from "chart.js";
 import {
-  FaHourglassStart,
-  FaTasks,
-  FaCheckCircle,
   FaEye,
   FaChevronDown,
   FaChevronUp,
@@ -46,9 +43,6 @@ function Dashboard() {
   const [mostrarPendentes, setMostrarPendentes] = useState(false);
   const [mostrarFazendo, setMostrarFazendo] = useState(false);
   const [mostrarFinalizadas, setMostrarFinalizadas] = useState(false);
-  const [periodo, setPeriodo] = useState("geral");
-  const [responsavelSelecionado, setResponsavelSelecionado] = useState("todos");
-  
 
   useEffect(() => {
     async function carregarDados() {
@@ -83,17 +77,23 @@ function Dashboard() {
     datasets: [
       {
         label: "PENDENTE",
-        data: labels.map((nome) => tarefas.filter((t) => t.status === "PENDENTE" && t.projeto?.nome === nome).length),
+        data: labels.map((nome) =>
+          tarefas.filter((t) => t.status === "PENDENTE" && t.projeto?.nome === nome).length
+        ),
         backgroundColor: "rgba(255, 193, 7, 0.85)",
       },
       {
         label: "FAZENDO",
-        data: labels.map((nome) => tarefas.filter((t) => t.status === "FAZENDO" && t.projeto?.nome === nome).length),
+        data: labels.map((nome) =>
+          tarefas.filter((t) => t.status === "FAZENDO" && t.projeto?.nome === nome).length
+        ),
         backgroundColor: "rgba(0, 123, 255, 0.85)",
       },
       {
         label: "FINALIZADA",
-        data: labels.map((nome) => tarefas.filter((t) => t.status === "FINALIZADA" && t.projeto?.nome === nome).length),
+        data: labels.map((nome) =>
+          tarefas.filter((t) => t.status === "FINALIZADA" && t.projeto?.nome === nome).length
+        ),
         backgroundColor: "rgba(40, 167, 69, 0.85)",
       },
     ],
@@ -104,18 +104,24 @@ function Dashboard() {
     datasets: [
       {
         label: "ALTA",
-        data: labels.map((nome) => tarefas.filter((t) => t.prioridade === "ALTA" && t.projeto?.nome === nome).length),
-        backgroundColor: "rgba(255, 0, 0, 0.7)",
+        data: labels.map((nome) =>
+          tarefas.filter((t) => t.prioridade === "ALTA" && t.projeto?.nome === nome).length
+        ),
+        backgroundColor: "rgba(220, 53, 69, 0.85)",
       },
       {
         label: "MEDIA",
-        data: labels.map((nome) => tarefas.filter((t) => t.prioridade === "MEDIA" && t.projeto?.nome === nome).length),
-        backgroundColor: "rgba(0, 123, 255, 0.7)",
+        data: labels.map((nome) =>
+          tarefas.filter((t) => t.prioridade === "MEDIA" && t.projeto?.nome === nome).length
+        ),
+        backgroundColor: "rgba(0, 123, 255, 0.85)",
       },
       {
         label: "BAIXA",
-        data: labels.map((nome) => tarefas.filter((t) => t.prioridade === "BAIXA" && t.projeto?.nome === nome).length),
-        backgroundColor: "rgba(40, 167, 69, 0.7)",
+        data: labels.map((nome) =>
+          tarefas.filter((t) => t.prioridade === "BAIXA" && t.projeto?.nome === nome).length
+        ),
+        backgroundColor: "rgba(40, 167, 69, 0.85)",
       },
     ],
   };
@@ -139,46 +145,64 @@ function Dashboard() {
       <Cabecalho />
       <div style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <section className="container py-5 text-white">
-          <div className="row gy-4 mb-4">
+          <h2 className="text-center mb-4 fw-bold">Painel Geral</h2>
+
+          <div className="row gy-4 mb-5">
             <div className="col-md-6">
-              <div className="p-3 border rounded bg-white" style={{ height: 400 }}>
+              <div className="p-3 border rounded bg-white shadow-sm" style={{ height: 400 }}>
                 <Bar data={dataVerticalBar} options={{ responsive: true, maintainAspectRatio: false }} />
               </div>
             </div>
             <div className="col-md-6">
-              <div className="p-3 border rounded bg-white" style={{ height: 400 }}>
+              <div className="p-3 border rounded bg-white shadow-sm" style={{ height: 400 }}>
                 <Bar data={dataHorizontalBar} options={{ indexAxis: "y", responsive: true, maintainAspectRatio: false }} />
               </div>
             </div>
           </div>
 
-          <div className="row text-center mb-4">
-            {[{ status: "PENDENTE", cor: "bg-warning", tarefas: pendentes, toggle: mostrarPendentes, set: setMostrarPendentes },
+          <div className="row text-center mb-5">
+            {[
+              { status: "PENDENTE", cor: "bg-warning", tarefas: pendentes, toggle: mostrarPendentes, set: setMostrarPendentes },
               { status: "FAZENDO", cor: "bg-primary", tarefas: fazendo, toggle: mostrarFazendo, set: setMostrarFazendo },
-              { status: "FINALIZADA", cor: "bg-success", tarefas: finalizadas, toggle: mostrarFinalizadas, set: setMostrarFinalizadas }]
-              .map(({ status, cor, tarefas, toggle, set }) => (
-                <div className="col-md-4" key={status}>
-                  <div className={`${cor} text-white p-3 rounded shadow`} onClick={() => set(!toggle)} style={{ cursor: "pointer" }}>
-                    <h5 className="mt-2">{status} ({tarefas.length}) {toggle ? <FaChevronUp /> : <FaChevronDown />}</h5>
-                  </div>
-                  {toggle && (
-                    <ul className="list-group mt-2">
-                      {tarefas.map((t) => (
-                        <li key={t.id} className="list-group-item d-flex justify-content-between align-items-center">
-                          {t.titulo}
-                          <button className="btn btn-outline-secondary btn-sm" onClick={() => navigate(`/tarefas/${t.id}`)}><FaEye /></button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+              { status: "FINALIZADA", cor: "bg-success", tarefas: finalizadas, toggle: mostrarFinalizadas, set: setMostrarFinalizadas }
+            ].map(({ status, cor, tarefas, toggle, set }) => (
+              <div className="col-md-4" key={status}>
+                <div
+                  className={`${cor} text-white p-3 rounded shadow-sm fw-bold`}
+                  onClick={() => set(!toggle)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <h5 className="mb-0">{status} ({tarefas.length}) {toggle ? <FaChevronUp /> : <FaChevronDown />}</h5>
                 </div>
-              ))}
+                {toggle && (
+                  <ul className="list-group mt-2">
+                    {tarefas.map((t) => (
+                      <li key={t.id} className="list-group-item d-flex justify-content-between align-items-center">
+                        {t.titulo}
+                        <button className="btn btn-outline-secondary btn-sm" onClick={() => navigate(`/tarefas/${t.id}`)}>
+                          <FaEye />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
           </div>
 
-          <div className="row mt-4 justify-content-center">
+          <div className="row justify-content-center">
             <div className="col-md-6">
-              <div className="p-3 border rounded bg-white" style={{ height: 300 }}>
-                <Pie data={dataPieChart} options={{ maintainAspectRatio: false, plugins: { legend: { position: "bottom" }, title: { display: true, text: "Usuários Ativos x Inativos" } } }} />
+              <div className="p-3 border rounded bg-white shadow-sm" style={{ height: 300 }}>
+                <Pie
+                  data={dataPieChart}
+                  options={{
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: { position: "bottom" },
+                      title: { display: true, text: "Usuários Ativos vs Inativos" },
+                    },
+                  }}
+                />
               </div>
             </div>
           </div>

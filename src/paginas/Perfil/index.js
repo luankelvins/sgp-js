@@ -15,7 +15,15 @@ function PerfilUsuario() {
   };
 
   if (!usuario) {
-    return <p>Carregando dados do perfil...</p>;
+    return (
+      <>
+        <Cabecalho />
+        <div className="container text-white text-center mt-5">
+          <h4>Carregando dados do perfil...</h4>
+        </div>
+        <Rodape />
+      </>
+    );
   }
 
   return (
@@ -23,29 +31,29 @@ function PerfilUsuario() {
       <Cabecalho />
       <section
         className="container-fluid py-5"
-        style={{ backgroundColor: "#0d1b2a", minHeight: "100vh", color: "white" }}
+        style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}
       >
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-md-6 text-center bg-white text-dark p-4 rounded shadow">
-              <img
-                src={fotoPadrao}
-                alt="Foto do usuário"
-                className="rounded-circle mb-3"
-                width="100"
-              />
-              <h3>{usuario.nome}</h3>
-              <p><strong>E-mail:</strong> {usuario.email}</p>
-              <p><strong>CPF:</strong> {usuario.cpf}</p>
-              <p><strong>Idade:</strong> {calcularIdade(usuario.dataNascimento)}</p>
+        <div className="container col-md-6 bg-white text-dark p-4 rounded shadow text-center">
+          <img
+            src={usuario.foto || fotoPadrao}
+            alt="Foto do usuário"
+            className="rounded-circle mb-3"
+            width="100"
+          />
+          <h3 className="mb-3">{usuario.nome}</h3>
 
-              <button
-                className="btn btn-outline-primary mt-3"
-                onClick={handleEditarPerfil}
-              >
-                Editar Perfil
-              </button>
-            </div>
+          <p><strong>E-mail:</strong> {usuario.email}</p>
+          <p><strong>CPF:</strong> {usuario.cpf}</p>
+          <p><strong>Idade:</strong> {calcularIdade(usuario.dataNascimento)}</p>
+          <p><strong>Status:</strong> {usuario.status}</p>
+
+          <div className="d-grid gap-2 mt-4">
+            <button
+              className="btn btn-outline-primary"
+              onClick={handleEditarPerfil}
+            >
+              Editar Perfil
+            </button>
           </div>
         </div>
       </section>

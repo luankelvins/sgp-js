@@ -57,11 +57,9 @@ const ListaTarefas = () => {
   const confirmarExclusao = async () => {
     try {
       await excluirTarefa(tarefaSelecionada);
-
       const novaLista = tarefas.filter((t) => t.id !== tarefaSelecionada);
       setTarefas(novaLista);
       setTarefasOriginais(novaLista);
-
       setMostrarModalConfirmacao(false);
       setMostrarModalSucesso(true);
     } catch (erro) {
@@ -150,6 +148,7 @@ const ListaTarefas = () => {
                 <div key={tarefa.id} className="card mb-4 shadow-sm border-0">
                   <div className="card-body">
                     <h5 className="card-title text-primary fw-bold">{tarefa.titulo}</h5>
+                    <p className="text-muted mb-2">{tarefa.descricao || "Sem descrição."}</p>
                     <p><strong>Prioridade:</strong> {tarefa.prioridade}</p>
                     <p><strong>Status:</strong> {tarefa.status}</p>
                     <p><strong>Data de Criação:</strong> {tarefa.dataCriacao}</p>

@@ -5,9 +5,8 @@ import Rodape from "../../componentes/Rodape";
 import Modal from "../../componentes/Modal";
 import { AuthContext } from "../../context/AuthContext";
 import { atualizarUsuario } from "../../servicos/usuarios";
-import { formatarDataParaInput } from "../../utils/data";
+import { formatarDataParaInput, formatarData } from "../../utils/data";
 import fotoPadrao from "../../assets/treina_recife_miniatura.png";
-import { formatarData } from "../../utils/data";
 
 function EditarPerfilUsuario() {
   const navigate = useNavigate();
@@ -38,16 +37,15 @@ function EditarPerfilUsuario() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     const { idade, ...dadosLimpos } = usuarioEditado;
-  
+
     const usuarioParaEnviar = {
       ...dadosLimpos,
-      dataNascimento: formatarData(usuarioEditado.dataNascimento) // envia como dd/MM/yyyy
+      dataNascimento: formatarData(usuarioEditado.dataNascimento),
     };
-  
+
     console.log("📤 Enviando para o backend:", usuarioParaEnviar);
-  
+
     try {
       const resposta = await atualizarUsuario(usuarioParaEnviar.id, usuarioParaEnviar);
       login(resposta.data);
@@ -69,8 +67,8 @@ function EditarPerfilUsuario() {
         className="container-fluid py-5"
         style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}
       >
-        <div className="container col-md-6 bg-white p-4 rounded shadow text-dark">
-          <h2 className="text-center mb-4">Editar Perfil</h2>
+        <div className="container col-md-6 bg-white text-dark p-4 rounded shadow">
+          <h2 className="mb-4 text-center">Editar Perfil</h2>
 
           <form onSubmit={handleSubmit}>
             <div className="text-center mb-4">
@@ -79,7 +77,7 @@ function EditarPerfilUsuario() {
                 alt="Foto do usuário"
                 className="rounded-circle mb-3"
                 width="100"
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", border: "2px solid #ced4da" }}
                 onClick={handleFotoClick}
                 title="Clique para trocar a foto"
               />
@@ -135,6 +133,7 @@ function EditarPerfilUsuario() {
                 name="dataNascimento"
                 value={formatarDataParaInput(usuarioEditado.dataNascimento)}
                 onChange={handleChange}
+                required
               />
             </div>
 
@@ -142,11 +141,11 @@ function EditarPerfilUsuario() {
 
             <div className="d-grid gap-2">
               <button type="submit" className="btn btn-success">
-                Salvar
+                Salvar Alterações
               </button>
               <button
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-danger"
                 onClick={() => navigate("/perfil")}
               >
                 Cancelar

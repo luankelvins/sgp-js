@@ -6,7 +6,6 @@ import Modal from "../../componentes/Modal";
 import { salvarUsuario } from "../../servicos/usuarios";
 import { formatarData } from "../../utils/data";
 
-
 function AdicionarUsuario() {
   const navigate = useNavigate();
 
@@ -32,7 +31,7 @@ function AdicionarUsuario() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const usuarioFormatado = {
         ...usuario,
@@ -40,34 +39,23 @@ function AdicionarUsuario() {
         dataNascimento: formatarData(usuario.dataNascimento),
       };
       delete usuarioFormatado.senhaTemporaria;
-  
+
       await salvarUsuario(usuarioFormatado, setMostrarModal);
     } catch (error) {
       console.error("Erro ao tentar salvar o usuário:", error);
     }
   };
 
-  const handleCancelar = () => {
-    setMostrarModal("cancelar");
-  };
-
-  const confirmarAdicao = () => {
-    navigate("/usuarios");
-  };
-
-  const confirmarCancelamento = () => {
-    navigate("/usuarios");
-  };
+  const handleCancelar = () => setMostrarModal("cancelar");
+  const confirmarAdicao = () => navigate("/usuarios");
+  const confirmarCancelamento = () => navigate("/usuarios");
 
   return (
     <>
       <Cabecalho />
-      <section
-        className="container-fluid py-5"
-        style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}
-      >
+      <section className="container-fluid py-5" style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <div className="container col-md-6 bg-white text-dark p-4 rounded shadow">
-          <h2 className="mb-4 text-center">Adicionar Novo Usuário</h2>
+          <h2 className="mb-4 text-center fw-bold text-primary">Adicionar Novo Usuário</h2>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
@@ -126,7 +114,7 @@ function AdicionarUsuario() {
               <label htmlFor="status" className="form-label">Status</label>
               <select
                 id="status"
-                className="form-control"
+                className="form-select"
                 name="status"
                 value={usuario.status}
                 onChange={handleChange}
@@ -164,7 +152,7 @@ function AdicionarUsuario() {
             </button>
             <button
               type="button"
-              className="btn btn-danger w-100"
+              className="btn btn-outline-danger w-100"
               onClick={handleCancelar}
             >
               Cancelar
@@ -172,6 +160,7 @@ function AdicionarUsuario() {
           </form>
         </div>
       </section>
+
       <Rodape />
 
       {mostrarModal === true && (

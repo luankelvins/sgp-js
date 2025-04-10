@@ -60,9 +60,8 @@ function ListarProjetos() {
   return (
     <>
       <Cabecalho />
-
       <div style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
-        <section className="container py-4">
+        <section className="container py-5">
           <div className="d-flex justify-content-end mb-4">
             <button className="btn btn-success btn-lg" onClick={() => navigate("/projetos/novo")}>
               + Novo Projeto
@@ -80,13 +79,7 @@ function ListarProjetos() {
 
                 return (
                   <div key={projeto.id} className="col-12 mb-4">
-                    <div
-                      className="card shadow border-0 p-4"
-                      style={{
-                        background: "linear-gradient(145deg, #fdfdfd, #f0f0f0)",
-                        borderRadius: "16px",
-                      }}
-                    >
+                    <div className="card shadow border-0 p-4 rounded" style={{ backgroundColor: "#f8f9fa" }}>
                       <h4 className="text-primary fw-bold mb-2">{projeto.nome}</h4>
                       <p><strong>Descrição:</strong> {projeto.descricao}</p>
                       <p><strong>Responsável:</strong> {projeto.responsavel?.nome || "-"}</p>
@@ -95,7 +88,7 @@ function ListarProjetos() {
                         <strong className="text-dark">Tarefas:</strong>
                         {tarefasDoProjeto.length > 0 ? (
                           <div className="table-responsive mt-2">
-                            <table className="table table-striped table-hover table-bordered align-middle">
+                            <table className="table table-bordered table-striped table-hover align-middle">
                               <thead className="table-dark text-center">
                                 <tr>
                                   <th>ID</th>
@@ -116,12 +109,12 @@ function ListarProjetos() {
                                     <td>{tarefa.usuario?.nome || "-"}</td>
                                     <td>{tarefa.dataCriacao}</td>
                                     <td>
-                                      <span className={`badge fs-6 px-3 py-1 ${tarefa.status === "FINALIZADA"
+                                      <span className={`badge px-3 py-2 fs-6 ${tarefa.status === "FINALIZADA"
                                         ? "bg-success"
                                         : tarefa.status === "FAZENDO"
-                                        ? "bg-warning text-dark"
-                                        : "bg-secondary"
-                                      }`}>
+                                          ? "bg-warning text-dark"
+                                          : "bg-secondary"
+                                        }`}>
                                         {tarefa.status}
                                       </span>
                                     </td>

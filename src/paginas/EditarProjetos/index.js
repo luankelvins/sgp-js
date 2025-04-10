@@ -76,14 +76,22 @@ const EditarProjeto = () => {
   const confirmarSucesso = () => navigate("/projetos");
 
   if (carregando) {
-    return <div className="text-center text-white mt-5"><h4>Carregando projeto...</h4></div>;
+    return (
+      <>
+        <Cabecalho />
+        <div className="container text-white text-center mt-5">
+          <h4>Carregando projeto...</h4>
+        </div>
+        <Rodape />
+      </>
+    );
   }
 
   if (!projeto) {
     return (
       <>
         <Cabecalho />
-        <div className="container text-center mt-5 text-white">
+        <div className="container text-white text-center mt-5">
           <h4>Projeto não encontrado.</h4>
         </div>
         <Rodape />
@@ -97,14 +105,15 @@ const EditarProjeto = () => {
       <section className="container-fluid py-5" style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <div className="container col-md-6 bg-white text-dark p-4 rounded shadow">
           <h2 className="mb-4 text-center">Editar Projeto</h2>
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="nome" className="form-label">Nome do Projeto</label>
               <input
                 type="text"
                 id="nome"
-                className="form-control"
                 name="nome"
+                className="form-control"
                 value={projeto.nome}
                 onChange={handleChange}
                 required
@@ -115,8 +124,8 @@ const EditarProjeto = () => {
               <label htmlFor="descricao" className="form-label">Descrição</label>
               <textarea
                 id="descricao"
-                className="form-control"
                 name="descricao"
+                className="form-control"
                 value={projeto.descricao}
                 onChange={handleChange}
                 required

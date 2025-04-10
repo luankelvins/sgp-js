@@ -3,10 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import Cabecalho from "../../componentes/Cabecalho";
 import Rodape from "../../componentes/Rodape";
 import Modal from "../../componentes/Modal";
-import { buscarTarefaPorId, excluirTarefa } from "../../servicos/tarefas";
+import { buscarTarefaPorId, excluirTarefa, editarTarefa } from "../../servicos/tarefas";
 import { buscarProjetoPorId } from "../../servicos/projetos";
 import { formatarData, calcularTempoGasto } from "../../utils/data";
-import { editarTarefa } from "../../servicos/tarefas";
 
 function VisualizarTarefaInd() {
   const { id } = useParams();
@@ -36,13 +35,8 @@ function VisualizarTarefaInd() {
     carregarDados();
   }, [id]);
 
-  const handleEditar = () => {
-    navigate(`/tarefas/${id}/editar`);
-  };
-
-  const handleExcluir = () => {
-    setMostrarModal(true);
-  };
+  const handleEditar = () => navigate(`/tarefas/${id}/editar`);
+  const handleExcluir = () => setMostrarModal(true);
 
   const confirmarExclusao = async () => {
     try {
@@ -54,31 +48,29 @@ function VisualizarTarefaInd() {
     }
   };
 
-
   const handleConcluirTarefa = async () => {
     try {
       const agora = new Date();
-      const dataISO = agora.toISOString().split("T")[0]; // yyyy-MM-dd
-      const dataConclusaoFormatada = formatarData(dataISO); // dd/MM/yyyy
-  
+      const dataISO = agora.toISOString().split("T")[0];
+      const dataConclusaoFormatada = formatarData(dataISO);
+
       const payload = {
         id: tarefa.id,
         titulo: tarefa.titulo,
-        dataCriacao: formatarData(tarefa.dataCriacao), // formato correto
+        descricao: tarefa.descricao,
+        dataCriacao: formatarData(tarefa.dataCriacao),
         dataConclusao: dataConclusaoFormatada,
         prioridade: tarefa.prioridade,
         status: "FINALIZADA",
         projeto: { id: tarefa.projeto?.id || tarefa.projetoId },
         usuario: { id: tarefa.usuario?.id || tarefa.usuarioId },
       };
-  
-      console.log("Payload enviado:", payload);
+
       await editarTarefa(tarefa.id, payload);
-  
       setTarefa((prev) => ({
         ...prev,
         status: "FINALIZADA",
-        dataConclusao: dataConclusaoFormatada, // Atualiza a exibição
+        dataConclusao: dataConclusaoFormatada,
       }));
     } catch (error) {
       console.error("Erro ao concluir tarefa:", error);
@@ -103,30 +95,29 @@ function VisualizarTarefaInd() {
   return (
     <>
       <Cabecalho />
-      <section
-        style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}
-        className="py-5"
-      >
+      <section className="container-fluid py-5" style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <div className="container col-md-8 bg-white text-dark p-4 rounded shadow">
-          <h2 className="mb-4">Detalhes da Tarefa</h2>
+          <h2 className="text-center mb-4">Detalhes da Tarefa</h2>
 
-          <p><strong>Título:</strong> {tarefa.titulo}</p>
-          <p><strong>Descrição:</strong> {tarefa.descricao || "-"}</p>
-          <p><strong>Data de Criação:</strong> {formatarData(tarefa.dataCriacao)}</p>
-          <p><strong>Data de Conclusão:</strong> {tarefa.dataConclusao ? formatarData(tarefa.dataConclusao) : "-"}</p>
-          <p><strong>Tempo Gasto:</strong> {tempoGasto}</p>
-          <p><strong>Status:</strong> {tarefa.status}</p>
-          <p><strong>Prioridade:</strong> {tarefa.prioridade}</p>
-
-          <hr />
-          <h5>Informações do Projeto</h5>
-          <p><strong>Projeto:</strong> {projeto?.nome || "-"}</p>
-          <p><strong>Descrição do Projeto:</strong> {projeto?.descricao || "-"}</p>
-          <p><strong>Responsável:</strong> {projeto?.responsavel?.nome || "-"}</p>
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <p><strong>Título:</strong> {tarefa.titulo}</p>
+              <p><strong>Descrição:</strong> {tarefa.descricao || "-"}</p>
+              <p><strong>Data de Criação:</strong> {formatarData(tarefa.dataCriacao)}</p>
+              <p><strong>Data de Conclusão:</strong> {tarefa.dataConclusao ? formatarData(tarefa.dataConclusao) : "-"}</p>
+              <p><strong>Tempo Gasto:</strong> {tempoGasto}</p>
+            </div>
+            <div className="col-md-6">
+              <p><strong>Status:</strong> {tarefa.status}</p>
+              <p><strong>Prioridade:</strong> {tarefa.prioridade}</p>
+              <p><strong>Projeto:</strong> {projeto?.nome || "-"}</p>
+              <p><strong>Descrição do Projeto:</strong> {projeto?.descricao || "-"}</p>
+              <p><strong>Responsável:</strong> {projeto?.responsavel?.nome || "-"}</p>
+            </div>
+          </div>
 
           <div className="mt-4 d-flex justify-content-between flex-wrap gap-2">
             <button className="btn btn-secondary" onClick={() => navigate("/tarefas")}>Voltar</button>
-
             <div className="d-flex gap-2">
               {tarefa.status !== "FINALIZADA" && (
                 <button className="btn btn-success" onClick={handleConcluirTarefa}>Concluir Tarefa</button>
@@ -137,6 +128,7 @@ function VisualizarTarefaInd() {
           </div>
         </div>
       </section>
+
       <Rodape />
 
       {mostrarModal && (

@@ -11,11 +11,9 @@ function Rodape() {
           </a>
 
           <ul className="nav col-md-4 justify-content-end">
-            <li className="nav-item"><a href="#" className="nav-link px-2 text-body-secondary">Home</a></li>
-            <li className="nav-item"><a href="#" className="nav-link px-2 text-body-secondary">Cursos</a></li>
-            <li className="nav-item"><a href="#" className="nav-link px-2 text-body-secondary">Professores</a></li>
-            <li className="nav-item"><a href="#" className="nav-link px-2 text-body-secondary">FAQs</a></li>
-            <li className="nav-item"><a href="#" className="nav-link px-2 text-body-secondary">Institucional</a></li>
+          <li className="nav-item">
+                <Link className="nav-link px-2 text-body-secondary" to="/dashboard">Dashboard</Link>
+              </li>
           </ul>
         </footer>
       </div>

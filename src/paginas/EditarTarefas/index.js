@@ -100,8 +100,6 @@ function EditarTarefa() {
       }
     };
 
-    console.log("📤 Payload enviado para o backend:", payload);
-
     try {
       await editarTarefa(tarefa.id, payload);
       setMostrarModalSucesso(true);
@@ -141,6 +139,7 @@ function EditarTarefa() {
                 type="text"
                 className="form-control"
                 name="titulo"
+                placeholder="Digite o título da tarefa"
                 value={tarefa.titulo}
                 onChange={handleChange}
                 required
@@ -154,6 +153,7 @@ function EditarTarefa() {
                 type="text"
                 className="form-control"
                 name="descricao"
+                placeholder="Descreva a tarefa"
                 value={tarefa.descricao}
                 onChange={handleChange}
               />

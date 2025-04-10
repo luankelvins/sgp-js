@@ -4,7 +4,7 @@ import Cabecalho from "../../componentes/Cabecalho";
 import Rodape from "../../componentes/Rodape";
 import Modal from "../../componentes/Modal";
 import { editarUsuario, buscarUsuarioPorId } from "../../servicos/usuarios";
-import { formatarData } from "../../utils/data";
+import { formatarData, formatarDataParaInput } from "../../utils/data";
 
 function EditarUsuario() {
   const { id } = useParams();
@@ -18,7 +18,11 @@ function EditarUsuario() {
     async function carregarUsuario() {
       try {
         const resposta = await buscarUsuarioPorId(id);
-        setUsuario(resposta.data);
+        const usuarioFormatado = {
+          ...resposta.data,
+          dataNascimento: formatarDataParaInput(resposta.data.dataNascimento),
+        };
+        setUsuario(usuarioFormatado);
       } catch (erro) {
         console.error("Erro ao carregar o usuário:", erro);
         alert("Erro ao carregar os dados do usuário.");
@@ -48,7 +52,8 @@ function EditarUsuario() {
         dataNascimento: formatarData(usuario.dataNascimento),
       };
 
-      await editarUsuario(usuario.id, payload, setMostrarModal);
+      await editarUsuario(usuario.id, payload);
+      setMostrarModal("sucesso");
     } catch (error) {
       console.error("Erro ao atualizar o usuário:", error);
       alert("Erro ao atualizar o usuário.");
@@ -82,9 +87,13 @@ function EditarUsuario() {
   return (
     <>
       <Cabecalho />
-      <section className="container-fluid py-5" style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
+      <section
+        className="container-fluid py-5"
+        style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}
+      >
         <div className="container col-md-6 bg-white text-dark p-4 rounded shadow">
           <h2 className="mb-4 text-center">Editar Usuário</h2>
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="nome" className="form-label">Nome</label>
@@ -138,7 +147,7 @@ function EditarUsuario() {
               />
             </div>
 
-            <div className="mb-3">
+            <div className="mb-4">
               <label htmlFor="status" className="form-label">Status</label>
               <select
                 id="status"
@@ -153,8 +162,16 @@ function EditarUsuario() {
               </select>
             </div>
 
-            <button type="submit" className="btn btn-success w-100 mb-2">Salvar Alterações</button>
-            <button type="button" className="btn btn-danger w-100" onClick={handleCancelar}>Cancelar</button>
+            <button type="submit" className="btn btn-success w-100 mb-2">
+              Salvar Alterações
+            </button>
+            <button
+              type="button"
+              className="btn btn-danger w-100"
+              onClick={handleCancelar}
+            >
+              Cancelar
+            </button>
           </form>
         </div>
       </section>

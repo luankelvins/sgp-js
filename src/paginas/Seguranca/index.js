@@ -57,9 +57,12 @@ function TrocarSenha() {
   return (
     <>
       <Cabecalho />
-      <section className="container-fluid py-5" style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
-        <div className="container col-md-6 bg-white p-4 rounded shadow">
-          <h3 className="text-center mb-4">Trocar Senha</h3>
+      <section
+        className="container-fluid py-5"
+        style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}
+      >
+        <div className="container col-md-6 bg-white p-4 rounded shadow text-dark">
+          <h2 className="text-center mb-4">Trocar Senha</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label className="form-label">Senha Atual</label>
@@ -67,7 +70,6 @@ function TrocarSenha() {
                 <input
                   type={mostrarSenhaAtual ? "text" : "password"}
                   className="form-control"
-                  name="senhaAtual"
                   value={senhaAtual}
                   onChange={(e) => setSenhaAtual(e.target.value)}
                   required
@@ -88,7 +90,6 @@ function TrocarSenha() {
                 <input
                   type={mostrarNovaSenha ? "text" : "password"}
                   className="form-control"
-                  name="novaSenha"
                   value={novaSenha}
                   onChange={(e) => setNovaSenha(e.target.value)}
                   required
@@ -103,7 +104,7 @@ function TrocarSenha() {
               </div>
               <div className="form-text">
                 Sua senha deve conter:
-                <ul className="mb-0">
+                <ul className="mb-0 ps-3">
                   <li style={{ color: senhaValida.maiuscula ? "green" : "red" }}>Letra maiúscula</li>
                   <li style={{ color: senhaValida.minuscula ? "green" : "red" }}>Letra minúscula</li>
                   <li style={{ color: senhaValida.numero ? "green" : "red" }}>Número</li>
@@ -119,7 +120,6 @@ function TrocarSenha() {
                 <input
                   type={mostrarConfirmarSenha ? "text" : "password"}
                   className="form-control"
-                  name="confirmarSenha"
                   value={confirmarSenha}
                   onChange={(e) => setConfirmarSenha(e.target.value)}
                   required

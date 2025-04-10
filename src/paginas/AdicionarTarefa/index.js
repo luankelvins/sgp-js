@@ -21,27 +21,17 @@ function Tarefas() {
     setMostrarModalSucesso(true);
   };
 
-  const handleCancelar = () => {
-    setMostrarModal(true);
-  };
-
-  const confirmarCancelamento = () => {
-    navigate("/tarefas");
-  };
-
-  const confirmarSucesso = () => {
-    navigate("/tarefas");
-  };
+  const handleCancelar = () => setMostrarModal(true);
+  const confirmarCancelamento = () => navigate("/tarefas");
+  const confirmarSucesso = () => navigate("/tarefas");
 
   return (
     <>
       <Cabecalho />
-      <section
-        className="container-fluid py-5"
-        style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}
-      >
+
+      <section className="container-fluid py-5" style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <div className="container col-md-6 bg-white text-dark p-4 rounded shadow">
-          <h2 className="mb-4 text-center">Adicionar Nova Tarefa</h2>
+          <h2 className="mb-4 text-center fw-bold text-primary">Adicionar Nova Tarefa</h2>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -50,7 +40,7 @@ function Tarefas() {
                 type="text"
                 className="form-control"
                 id="titulo"
-                placeholder="Digite o título da tarefa:"
+                placeholder="Digite o título da tarefa"
                 required
               />
             </div>
@@ -61,7 +51,7 @@ function Tarefas() {
                 type="text"
                 className="form-control"
                 id="descricao"
-                placeholder="Descreva a tarefa:"
+                placeholder="Descreva a tarefa"
               />
             </div>
 
@@ -79,7 +69,7 @@ function Tarefas() {
                 <label htmlFor="status" className="form-label">Status:</label>
                 <select
                   id="status"
-                  className="form-control"
+                  className="form-select"
                   required
                   defaultValue=""
                 >
@@ -96,7 +86,7 @@ function Tarefas() {
                 <label htmlFor="responsavel" className="form-label">Responsável:</label>
                 <select
                   id="responsavel"
-                  className="form-control"
+                  className="form-select"
                   required
                   defaultValue=""
                 >
@@ -110,7 +100,7 @@ function Tarefas() {
                 <label htmlFor="projeto" className="form-label">Projeto:</label>
                 <select
                   id="projeto"
-                  className="form-control"
+                  className="form-select"
                   required
                   defaultValue=""
                 >
@@ -138,7 +128,7 @@ function Tarefas() {
                 <label htmlFor="tempoAntes" className="form-label">Quanto tempo antes? (em minutos):</label>
                 <select
                   id="tempoAntes"
-                  className="form-control"
+                  className="form-select"
                   value={tempoAntes}
                   onChange={(e) => setTempoAntes(e.target.value)}
                 >
@@ -160,7 +150,7 @@ function Tarefas() {
             <div className="mb-4">
               <button
                 type="button"
-                className="btn btn-danger w-100"
+                className="btn btn-outline-danger w-100"
                 onClick={handleCancelar}
               >
                 Cancelar
@@ -169,6 +159,7 @@ function Tarefas() {
           </form>
         </div>
       </section>
+
       <Rodape />
 
       {mostrarModal && (

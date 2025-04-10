@@ -52,11 +52,6 @@ const usuarioLogado = LISTA_USUARIOS[0];
             </ul>
 
             <div className="d-flex align-items-center gap-3">
-              <form className="d-flex" role="search">
-                <input className="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" />
-                <button className="btn btn-primary" type="submit">Buscar</button>
-              </form>
-
               <div className="dropdown">
                 <button
                   className="btn dropdown-toggle p-0 border-0 bg-transparent"

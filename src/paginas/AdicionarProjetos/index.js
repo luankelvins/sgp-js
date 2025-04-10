@@ -53,12 +53,12 @@ const AdicionarProjeto = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!projeto.responsavel) {
       alert("Selecione um responsável.");
       return;
     }
-  
+
     const payload = {
       nome: projeto.nome,
       descricao: projeto.descricao,
@@ -67,7 +67,7 @@ const AdicionarProjeto = () => {
         nome: projeto.responsavel.nome,
       },
     };
-  
+
     try {
       const resposta = await salvarProjeto(payload);
       console.log("Projeto salvo com sucesso:", resposta);
@@ -78,28 +78,17 @@ const AdicionarProjeto = () => {
     }
   };
 
-  const confirmarAdicao = () => {
-    navigate("/projetos");
-  };
-
-  const handleCancelar = () => {
-    setMostrarModal("cancelar");
-  };
-
-  const confirmarCancelamento = () => {
-    navigate("/projetos");
-  };
+  const confirmarAdicao = () => navigate("/projetos");
+  const handleCancelar = () => setMostrarModal("cancelar");
+  const confirmarCancelamento = () => navigate("/projetos");
 
   return (
     <>
       <Cabecalho />
 
-      <section
-        className="container-fluid py-5"
-        style={{ backgroundColor: "#0d1b2a", minHeight: "100vh", color: "white" }}
-      >
+      <section className="container-fluid py-5" style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <div className="container col-md-6 bg-white text-dark p-4 rounded shadow">
-          <h2 className="mb-4 text-center">Adicionar Novo Projeto</h2>
+          <h2 className="mb-4 text-center fw-bold text-primary">Adicionar Novo Projeto</h2>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
@@ -109,6 +98,7 @@ const AdicionarProjeto = () => {
                 id="nome"
                 className="form-control"
                 name="nome"
+                placeholder="Digite o nome do projeto"
                 value={projeto.nome}
                 onChange={handleChange}
                 required
@@ -121,6 +111,7 @@ const AdicionarProjeto = () => {
                 id="descricao"
                 className="form-control"
                 name="descricao"
+                placeholder="Descreva brevemente o projeto"
                 value={projeto.descricao}
                 onChange={handleChange}
                 required
@@ -132,7 +123,7 @@ const AdicionarProjeto = () => {
               <select
                 id="responsavel"
                 name="responsavelId"
-                className="form-control"
+                className="form-select"
                 value={projeto.responsavel?.id || ""}
                 onChange={handleChange}
                 required
@@ -149,7 +140,7 @@ const AdicionarProjeto = () => {
             <button type="submit" className="btn btn-success w-100 mb-2">
               Adicionar Projeto
             </button>
-            <button type="button" className="btn btn-danger w-100" onClick={handleCancelar}>
+            <button type="button" className="btn btn-outline-danger w-100" onClick={handleCancelar}>
               Cancelar
             </button>
           </form>

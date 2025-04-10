@@ -5,8 +5,7 @@ import Rodape from "../../componentes/Rodape";
 import Modal from "../../componentes/Modal";
 import { buscarTarefaPorId, editarTarefa } from "../../servicos/tarefas";
 import { listarProjetos } from "../../servicos/projetos";
-import { formatarData } from "../../utils/data";
-import { desformatarData } from "../../utils/data";
+import { formatarData, formatarDataParaInput } from "../../utils/data";
 
 function EditarTarefa() {
   const { id } = useParams();
@@ -36,9 +35,8 @@ function EditarTarefa() {
           id: tarefaData.id,
           titulo: tarefaData.titulo,
           descricao: tarefaData.descricao || "",
-          dataCriacao: tarefaData.dataCriacao,
-          dataCriacaoFormatada: formatarData(tarefaData.dataCriacao),
-          dataConclusao: tarefaData.dataConclusao || "",
+          dataCriacao: formatarDataParaInput(tarefaData.dataCriacao),
+          dataConclusao: formatarDataParaInput(tarefaData.dataConclusao),
           prioridade: tarefaData.prioridade,
           status: tarefaData.status,
           projetoId: projetoSelecionado?.id || "",
@@ -89,8 +87,8 @@ function EditarTarefa() {
       id: tarefa.id,
       titulo: tarefa.titulo,
       descricao: tarefa.descricao || "",
-      dataCriacao: desformatarData(tarefa.dataCriacaoFormatada),
-      dataConclusao: tarefa.dataConclusao ? desformatarData(tarefa.dataConclusao) : null,
+      dataCriacao: formatarData(tarefa.dataCriacao),
+      dataConclusao: tarefa.dataConclusao ? formatarData(tarefa.dataConclusao) : null,
       prioridade: tarefa.prioridade,
       status: tarefa.status,
       qtdeDiasTrabalhados: 0,
@@ -163,12 +161,14 @@ function EditarTarefa() {
 
             <div className="row mb-4">
               <div className="col-md-6">
-                <label className="form-label">Data de Criação</label>
+                <label htmlFor="dataCriacao" className="form-label">Data de Criação</label>
                 <input
-                  type="text"
+                  id="dataCriacao"
+                  type="date"
+                  name="dataCriacao"
                   className="form-control"
-                  style={{ backgroundColor: "#e9ecef" }}
-                  value={tarefa.dataCriacaoFormatada}
+                  value={tarefa.dataCriacao}
+                  onChange={handleChange}
                   readOnly
                 />
               </div>

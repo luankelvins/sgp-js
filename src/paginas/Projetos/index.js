@@ -63,9 +63,9 @@ function ListarProjetos() {
 
       <div style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <section className="container py-4">
-          <div className="d-flex justify-content-end mb-3">
-            <button className="btn btn-success" onClick={() => navigate("/projetos/novo")}>
-              Adicionar Projeto
+          <div className="d-flex justify-content-end mb-4">
+            <button className="btn btn-success btn-lg" onClick={() => navigate("/projetos/novo")}>
+              + Novo Projeto
             </button>
           </div>
 
@@ -80,17 +80,23 @@ function ListarProjetos() {
 
                 return (
                   <div key={projeto.id} className="col-12 mb-4">
-                    <div className="card p-4 shadow rounded" style={{ backgroundColor: "#f8f9fa" }}>
-                      <h4 className="text-primary fw-bold">{projeto.nome}</h4>
+                    <div
+                      className="card shadow border-0 p-4"
+                      style={{
+                        background: "linear-gradient(145deg, #fdfdfd, #f0f0f0)",
+                        borderRadius: "16px",
+                      }}
+                    >
+                      <h4 className="text-primary fw-bold mb-2">{projeto.nome}</h4>
                       <p><strong>Descrição:</strong> {projeto.descricao}</p>
                       <p><strong>Responsável:</strong> {projeto.responsavel?.nome || "-"}</p>
 
-                      <div className="mt-3">
+                      <div className="mt-4">
                         <strong className="text-dark">Tarefas:</strong>
                         {tarefasDoProjeto.length > 0 ? (
                           <div className="table-responsive mt-2">
-                            <table className="table table-bordered table-hover align-middle">
-                              <thead className="table-primary text-center">
+                            <table className="table table-striped table-hover table-bordered align-middle">
+                              <thead className="table-dark text-center">
                                 <tr>
                                   <th>ID</th>
                                   <th>Título</th>
@@ -103,14 +109,14 @@ function ListarProjetos() {
                               </thead>
                               <tbody>
                                 {tarefasDoProjeto.map((tarefa) => (
-                                  <tr key={tarefa.id}>
-                                    <td className="text-center">{tarefa.id}</td>
-                                    <td>{tarefa.titulo}</td>
-                                    <td>{tarefa.descricao || "-"}</td>
+                                  <tr key={tarefa.id} className="text-center">
+                                    <td>{tarefa.id}</td>
+                                    <td className="text-start">{tarefa.titulo}</td>
+                                    <td className="text-start">{tarefa.descricao || "-"}</td>
                                     <td>{tarefa.usuario?.nome || "-"}</td>
-                                    <td className="text-center">{tarefa.dataCriacao}</td>
-                                    <td className="text-center">
-                                      <span className={`badge ${tarefa.status === "FINALIZADA"
+                                    <td>{tarefa.dataCriacao}</td>
+                                    <td>
+                                      <span className={`badge fs-6 px-3 py-1 ${tarefa.status === "FINALIZADA"
                                         ? "bg-success"
                                         : tarefa.status === "FAZENDO"
                                         ? "bg-warning text-dark"
@@ -119,7 +125,7 @@ function ListarProjetos() {
                                         {tarefa.status}
                                       </span>
                                     </td>
-                                    <td className="text-center">
+                                    <td>
                                       <button
                                         className="btn btn-sm btn-outline-primary me-1"
                                         onClick={() => navigate(`/tarefas/${tarefa.id}/editar`)}
@@ -143,11 +149,11 @@ function ListarProjetos() {
                         )}
                       </div>
 
-                      <div className="d-flex justify-content-end gap-2 mt-4">
-                        <button className="btn btn-primary" onClick={() => handleEditar(projeto.id)}>
+                      <div className="d-flex justify-content-end gap-3 mt-4">
+                        <button className="btn btn-outline-primary" onClick={() => handleEditar(projeto.id)}>
                           Editar Projeto
                         </button>
-                        <button className="btn btn-danger" onClick={() => handleAbrirModalExcluir(projeto.id)}>
+                        <button className="btn btn-outline-danger" onClick={() => handleAbrirModalExcluir(projeto.id)}>
                           Excluir Projeto
                         </button>
                       </div>

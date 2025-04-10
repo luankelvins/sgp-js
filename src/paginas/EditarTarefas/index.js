@@ -93,8 +93,12 @@ function EditarTarefa() {
       prioridade: tarefa.prioridade,
       status: tarefa.status,
       qtdeDiasTrabalhados: 0,
-      usuario:  {"id" : tarefa.projetoId },
-      projeto:  {"id": tarefa.projetoId },
+      usuario:  {
+        id: tarefa.projetoId 
+      },
+      projeto:  {
+        id: tarefa.projetoId 
+      },
     };
 
     console.log("📤 Payload enviado para o backend:", payload);

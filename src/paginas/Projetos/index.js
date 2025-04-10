@@ -79,16 +79,17 @@ function ListarProjetos() {
                 const tarefasDoProjeto = buscarTarefasDoProjeto(projeto.id);
 
                 return (
-                  <div key={projeto.id} className="col-md-6 col-lg-4 mb-4">
-                    <div className="card h-100 p-3 shadow-sm rounded">
+                  <div key={projeto.id} className="col-12 mb-4">
+                    <div className="card p-3 shadow-sm rounded">
                       <h5 className="card-title">{projeto.nome}</h5>
                       <p><strong>Descrição:</strong> {projeto.descricao}</p>
                       <p><strong>Responsável:</strong> {projeto.responsavel?.nome || "-"}</p>
-                      <div>
+
+                      <div className="mt-3">
                         <strong>Tarefas:</strong>
                         {tarefasDoProjeto.length > 0 ? (
                           <div className="table-responsive mt-2">
-                            <table className="table table-sm table-bordered">
+                            <table className="table table-sm table-bordered align-middle">
                               <thead className="table-light">
                                 <tr>
                                   <th>ID</th>
@@ -129,12 +130,13 @@ function ListarProjetos() {
                             </table>
                           </div>
                         ) : (
-                          <p>-</p>
+                          <p className="mt-2">Nenhuma tarefa cadastrada.</p>
                         )}
                       </div>
-                      <div className="d-flex justify-content-end gap-2 mt-auto">
-                        <button className="btn btn-sm btn-primary" onClick={() => handleEditar(projeto.id)}>Editar</button>
-                        <button className="btn btn-sm btn-danger" onClick={() => handleAbrirModalExcluir(projeto.id)}>Excluir</button>
+
+                      <div className="d-flex justify-content-end gap-2 mt-3">
+                        <button className="btn btn-sm btn-primary" onClick={() => handleEditar(projeto.id)}>Editar Projeto</button>
+                        <button className="btn btn-sm btn-danger" onClick={() => handleAbrirModalExcluir(projeto.id)}>Excluir Projeto</button>
                       </div>
                     </div>
                   </div>

@@ -94,7 +94,7 @@ function EditarTarefa() {
       status: tarefa.status,
       qtdeDiasTrabalhados: 0,
       usuario:  {
-        id: tarefa.projetoId 
+        id: tarefa.usuarioId 
       },
       projeto:  {
         id: tarefa.projetoId 

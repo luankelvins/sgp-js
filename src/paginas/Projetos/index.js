@@ -80,17 +80,17 @@ function ListarProjetos() {
 
                 return (
                   <div key={projeto.id} className="col-12 mb-4">
-                    <div className="card p-3 shadow-sm rounded">
-                      <h5 className="card-title">{projeto.nome}</h5>
+                    <div className="card p-4 shadow rounded" style={{ backgroundColor: "#f8f9fa" }}>
+                      <h4 className="text-primary fw-bold">{projeto.nome}</h4>
                       <p><strong>Descrição:</strong> {projeto.descricao}</p>
                       <p><strong>Responsável:</strong> {projeto.responsavel?.nome || "-"}</p>
 
                       <div className="mt-3">
-                        <strong>Tarefas:</strong>
+                        <strong className="text-dark">Tarefas:</strong>
                         {tarefasDoProjeto.length > 0 ? (
                           <div className="table-responsive mt-2">
-                            <table className="table table-sm table-bordered align-middle">
-                              <thead className="table-light">
+                            <table className="table table-bordered table-hover align-middle">
+                              <thead className="table-primary text-center">
                                 <tr>
                                   <th>ID</th>
                                   <th>Título</th>
@@ -104,21 +104,30 @@ function ListarProjetos() {
                               <tbody>
                                 {tarefasDoProjeto.map((tarefa) => (
                                   <tr key={tarefa.id}>
-                                    <td>{tarefa.id}</td>
+                                    <td className="text-center">{tarefa.id}</td>
                                     <td>{tarefa.titulo}</td>
                                     <td>{tarefa.descricao || "-"}</td>
                                     <td>{tarefa.usuario?.nome || "-"}</td>
-                                    <td>{tarefa.dataCriacao}</td>
-                                    <td>{tarefa.status}</td>
-                                    <td>
+                                    <td className="text-center">{tarefa.dataCriacao}</td>
+                                    <td className="text-center">
+                                      <span className={`badge ${tarefa.status === "FINALIZADA"
+                                        ? "bg-success"
+                                        : tarefa.status === "FAZENDO"
+                                        ? "bg-warning text-dark"
+                                        : "bg-secondary"
+                                      }`}>
+                                        {tarefa.status}
+                                      </span>
+                                    </td>
+                                    <td className="text-center">
                                       <button
-                                        className="btn btn-sm btn-primary me-1"
+                                        className="btn btn-sm btn-outline-primary me-1"
                                         onClick={() => navigate(`/tarefas/${tarefa.id}/editar`)}
                                       >
                                         Editar
                                       </button>
                                       <button
-                                        className="btn btn-sm btn-danger"
+                                        className="btn btn-sm btn-outline-danger"
                                         onClick={() => alert(`Excluir tarefa ${tarefa.id}`)}
                                       >
                                         Excluir
@@ -134,9 +143,13 @@ function ListarProjetos() {
                         )}
                       </div>
 
-                      <div className="d-flex justify-content-end gap-2 mt-3">
-                        <button className="btn btn-sm btn-primary" onClick={() => handleEditar(projeto.id)}>Editar Projeto</button>
-                        <button className="btn btn-sm btn-danger" onClick={() => handleAbrirModalExcluir(projeto.id)}>Excluir Projeto</button>
+                      <div className="d-flex justify-content-end gap-2 mt-4">
+                        <button className="btn btn-primary" onClick={() => handleEditar(projeto.id)}>
+                          Editar Projeto
+                        </button>
+                        <button className="btn btn-danger" onClick={() => handleAbrirModalExcluir(projeto.id)}>
+                          Excluir Projeto
+                        </button>
                       </div>
                     </div>
                   </div>

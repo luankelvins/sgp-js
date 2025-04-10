@@ -6,6 +6,7 @@ import Modal from "../../componentes/Modal";
 import { buscarTarefaPorId, editarTarefa } from "../../servicos/tarefas";
 import { listarProjetos } from "../../servicos/projetos";
 import { formatarData } from "../../utils/data";
+import { desformatarData } from "../../utils/data";
 
 function EditarTarefa() {
   const { id } = useParams();
@@ -88,17 +89,17 @@ function EditarTarefa() {
       id: tarefa.id,
       titulo: tarefa.titulo,
       descricao: tarefa.descricao || "",
-      dataCriacao: tarefa.dataCriacao,
-      dataConclusao: tarefa.dataConclusao || null,
+      dataCriacao: desformatarData(tarefa.dataCriacaoFormatada),
+      dataConclusao: tarefa.dataConclusao ? desformatarData(tarefa.dataConclusao) : null,
       prioridade: tarefa.prioridade,
       status: tarefa.status,
       qtdeDiasTrabalhados: 0,
-      usuario:  {
-        id: tarefa.usuarioId 
+      usuario: {
+        id: tarefa.usuarioId
       },
-      projeto:  {
-        id: tarefa.projetoId 
-      },
+      projeto: {
+        id: tarefa.projetoId
+      }
     };
 
     console.log("📤 Payload enviado para o backend:", payload);

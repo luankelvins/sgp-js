@@ -133,7 +133,7 @@ const ListaTarefas = () => {
       });
 
       doc.setFontSize(10);
-      doc.text(`Exportado em: ${dataAtual}`, data.settings.margin.rigth, doc.internal.pageSize.height - 10, 200, 10, { align: "right" });
+      doc.text(`Exportado em: ${dataAtual}`, doc.internal.pageSize.height - 10, 200, 10, { align: "right" });
   
       doc.save("relatorio_tarefas.pdf");
     };

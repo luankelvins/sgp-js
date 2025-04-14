@@ -5,6 +5,10 @@ import Rodape from "../../componentes/Rodape";
 import Modal from "../../componentes/Modal";
 import { listarProjetos } from "../../servicos/projetos";
 import { listarTarefas, excluirTarefa } from "../../servicos/tarefas";
+import { FaFilePdf } from "react-icons/fa";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import logo from "../../assets/sgp_logo_horizontal.png";
 
 const ListaTarefas = () => {
   const navigate = useNavigate();
@@ -83,6 +87,59 @@ const ListaTarefas = () => {
     setTarefas(tarefasOriginais);
   };
 
+  const handleExportarPdf = () => {
+    const doc = new jsPDF();
+  
+    const dataAtual = new Date().toLocaleString();
+  
+    // Adiciona a logomarca (ajuste se necessário)
+    const img = new Image();
+    img.src = logo;
+    img.onload = () => {
+      doc.addImage(img, "PNG", 10, 10, 30, 30);
+  
+      doc.setFontSize(18);
+      doc.text("Relatório de Tarefas", 105, 20, { align: "center" });
+  
+      doc.setFontSize(10);
+      doc.text(`Exportado em: ${dataAtual}`, 200, 10, { align: "right" });
+  
+      const colunas = [
+        "Título",
+        "Status",
+        "Prioridade",
+        "Projeto",
+        "Responsável",
+        "Criação",
+        "Conclusão",
+      ];
+  
+      const linhas = tarefas.map((t) => [
+        t.titulo,
+        t.status,
+        t.prioridade,
+        t.projeto?.nome || "-",
+        t.usuario?.nome || "-",
+        t.dataCriacao || "-",
+        t.dataConclusao || "-",
+      ]);
+  
+      autoTable(doc, {
+        head: [colunas],
+        body: linhas,
+        startY: 50,
+        styles: { fontSize: 9 },
+        didDrawPage: (data) => {
+          const pageCount = doc.internal.getNumberOfPages();
+          doc.setFontSize(8);
+          doc.text(`Página ${doc.internal.getCurrentPageInfo().pageNumber} de ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
+        },
+      });
+  
+      doc.save("relatorio_tarefas.pdf");
+    };
+  };
+
   return (
     <>
       <Cabecalho />
@@ -90,6 +147,9 @@ const ListaTarefas = () => {
         <div className="container py-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="text-white fw-bold">Lista de Tarefas</h2>
+            <button className="btn btn-outline-secondary btn-sm" onClick={handleExportarPdf}>
+              <FaFilePdf />
+            </button>
             <button className="btn btn-success btn-lg" onClick={handleAdicionarTarefa}>
               + Nova Tarefa
             </button>

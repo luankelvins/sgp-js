@@ -90,26 +90,26 @@ const ListaTarefas = () => {
   const handleExportarPdf = () => {
     const doc = new jsPDF("p", "mm", "a4");
     const dataAtual = new Date().toLocaleString("pt-BR");
-  
+
     const paginaLargura = doc.internal.pageSize.getWidth();
     const paginaAltura = doc.internal.pageSize.getHeight();
-  
+
     const img = new Image();
     img.src = logo;
-  
+
     img.onload = () => {
       // Logomarca
       doc.addImage(img, "PNG", 10, 10, 25, 25);
-  
+
       // Título centralizado
       doc.setFontSize(18);
       doc.setTextColor(13, 27, 42); // cor parecida com o fundo da página
       doc.text("RELATÓRIO DE TAREFAS", paginaLargura / 2, 20, { align: "center" });
-  
+
       doc.setFontSize(12);
       doc.setTextColor(80);
       doc.text("Sistema de Gerenciamento", paginaLargura / 2, 28, { align: "center" });
-  
+
       // Espaço para tabela
       autoTable(doc, {
         startY: 40,
@@ -145,17 +145,16 @@ const ListaTarefas = () => {
           fillColor: [240, 240, 240],
         },
         didDrawPage: (data) => {
-          // Número da página no rodapé (centro)
+
           const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
           doc.setFontSize(9);
           doc.setTextColor(100);
           doc.text(`Página ${pageNumber}`, paginaLargura / 2, paginaAltura - 10, { align: "center" });
-  
-          // Data de exportação no canto inferior direito
+
           doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 10, paginaAltura - 10, { align: "right" });
         },
       });
-  
+
       doc.save("relatorio_tarefas.pdf");
     };
   };
@@ -164,115 +163,118 @@ const ListaTarefas = () => {
     <>
       <Cabecalho />
       <section style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
-        <div className="container py-5">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 className="text-white fw-bold">Lista de Tarefas</h2>
-            <button className="btn btn-outline-secondary btn-sm" onClick={handleExportarPdf}>
-              <FaFilePdf />
-            </button>
-            <button className="btn btn-success btn-lg" onClick={handleAdicionarTarefa}>
-              + Nova Tarefa
-            </button>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2 className="text-white fw-bold">Lista de Tarefas</h2>
+          <button className="btn btn-outline-secondary btn-sm" onClick={handleExportarPdf}>
+            <FaFilePdf />
+          </button>
+          <button className="btn btn-success btn-lg" onClick={handleAdicionarTarefa}>
+            + Nova Tarefa
+          </button>
+        </div>
+
+        <div className="row g-3 mb-4 text-white">
+          <div className="col-md-4">
+            <label>Status</label>
+            <select className="form-select form-select-sm" value={filtroStatus} onChange={(e) => setFiltroStatus(e.target.value)}>
+              <option value="">Todos</option>
+              <option value="PENDENTE">PENDENTE</option>
+              <option value="FAZENDO">FAZENDO</option>
+              <option value="FINALIZADA">FINALIZADA</option>
+            </select>
           </div>
-
-          <div className="row g-3 mb-4 text-white">
-            <div className="col-md-4">
-              <label>Status</label>
-              <select className="form-select form-select-sm" value={filtroStatus} onChange={(e) => setFiltroStatus(e.target.value)}>
-                <option value="">Todos</option>
-                <option value="PENDENTE">PENDENTE</option>
-                <option value="FAZENDO">FAZENDO</option>
-                <option value="FINALIZADA">FINALIZADA</option>
-              </select>
-            </div>
-            <div className="col-md-4">
-              <label>Projeto</label>
-              <select className="form-select form-select-sm" value={filtroProjeto} onChange={(e) => setFiltroProjeto(e.target.value)}>
-                <option value="">Todos</option>
-                {projetos.map((projeto) => (
-                  <option key={projeto.id} value={projeto.nome}>{projeto.nome}</option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-4">
-              <label>Prioridade</label>
-              <select className="form-select form-select-sm" value={filtroPrioridade} onChange={(e) => setFiltroPrioridade(e.target.value)}>
-                <option value="">Todas</option>
-                <option value="ALTA">ALTA</option>
-                <option value="MEDIA">MEDIA</option>
-                <option value="BAIXA">BAIXA</option>
-              </select>
-            </div>
+          <div className="col-md-4">
+            <label>Projeto</label>
+            <select className="form-select form-select-sm" value={filtroProjeto} onChange={(e) => setFiltroProjeto(e.target.value)}>
+              <option value="">Todos</option>
+              {projetos.map((projeto) => (
+                <option key={projeto.id} value={projeto.nome}>{projeto.nome}</option>
+              ))}
+            </select>
           </div>
-
-          <div className="d-flex flex-wrap justify-content-end gap-2 mb-4">
-            <button className="btn btn-primary btn-sm" onClick={aplicarFiltros}>Filtrar</button>
-            <button className="btn btn-secondary btn-sm" onClick={limparFiltros}>Limpar</button>
+          <div className="col-md-4">
+            <label>Prioridade</label>
+            <select className="form-select form-select-sm" value={filtroPrioridade} onChange={(e) => setFiltroPrioridade(e.target.value)}>
+              <option value="">Todas</option>
+              <option value="ALTA">ALTA</option>
+              <option value="MEDIA">MEDIA</option>
+              <option value="BAIXA">BAIXA</option>
+            </select>
           </div>
+        </div>
 
-          {tarefas.length > 0 ? (
-            tarefas.map((tarefa) => {
-              const tempoGasto = (() => {
-                if (tarefa.status === "FINALIZADA" && tarefa.dataCriacao && tarefa.dataConclusao) {
-                  const inicio = new Date(tarefa.dataCriacao);
-                  const fim = new Date(tarefa.dataConclusao);
-                  const diff = fim - inicio;
-                  const horas = Math.floor(diff / (1000 * 60 * 60));
-                  const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                  return `${horas}h ${minutos}min`;
-                }
-                return null;
-              })();
+        <div className="d-flex flex-wrap justify-content-end gap-2 mb-4">
+          <button className="btn btn-primary btn-sm" onClick={aplicarFiltros}>Filtrar</button>
+          <button className="btn btn-secondary btn-sm" onClick={limparFiltros}>Limpar</button>
+        </div>
 
-              return (
-                <div key={tarefa.id} className="card mb-4 shadow-sm border-0">
-                  <div className="card-body">
-                    <h5 className="card-title text-primary fw-bold">{tarefa.titulo}</h5>
-                    <p className="text-muted mb-2">{tarefa.descricao || "Sem descrição."}</p>
-                    <p><strong>Prioridade:</strong> {tarefa.prioridade}</p>
-                    <p><strong>Status:</strong> {tarefa.status}</p>
-                    <p><strong>Data de Criação:</strong> {tarefa.dataCriacao}</p>
-                    <p><strong>Data de Conclusão:</strong> {tarefa.dataConclusao || "-"}</p>
-                    <p><strong>Projeto:</strong> {tarefa.projeto?.nome || "-"}</p>
-                    <p><strong>Responsável:</strong> {tarefa.usuario?.nome || "-"}</p>
-                    {tempoGasto && <p><strong>Tempo Gasto:</strong> {tempoGasto}</p>}
+        {tarefas.length > 0 ? (
+          tarefas.map((tarefa) => {
+            const tempoGasto = (() => {
+              if (tarefa.status === "FINALIZADA" && tarefa.dataCriacao && tarefa.dataConclusao) {
+                const inicio = new Date(tarefa.dataCriacao);
+                const fim = new Date(tarefa.dataConclusao);
+                const diff = fim - inicio;
+                const horas = Math.floor(diff / (1000 * 60 * 60));
+                const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                return `${horas}h ${minutos}min`;
+              }
+              return null;
+            })();
 
-                    <div className="d-flex justify-content-end gap-2 mt-3">
-                      <button className="btn btn-sm btn-outline-primary" onClick={() => handleEditar(tarefa.id)}>Editar</button>
-                      <button className="btn btn-sm btn-outline-danger" onClick={() => handleExcluir(tarefa.id)}>Excluir</button>
-                    </div>
+            return (
+              <div key={tarefa.id} className="card mb-4 shadow-sm border-0">
+                <div className="card-body">
+                  <h5 className="card-title text-primary fw-bold">{tarefa.titulo}</h5>
+                  <p className="text-muted mb-2">{tarefa.descricao || "Sem descrição."}</p>
+                  <p><strong>Prioridade:</strong> {tarefa.prioridade}</p>
+                  <p><strong>Status:</strong> {tarefa.status}</p>
+                  <p><strong>Data de Criação:</strong> {tarefa.dataCriacao}</p>
+                  <p><strong>Data de Conclusão:</strong> {tarefa.dataConclusao || "-"}</p>
+                  <p><strong>Projeto:</strong> {tarefa.projeto?.nome || "-"}</p>
+                  <p><strong>Responsável:</strong> {tarefa.usuario?.nome || "-"}</p>
+                  {tempoGasto && <p><strong>Tempo Gasto:</strong> {tempoGasto}</p>}
+
+                  <div className="d-flex justify-content-end gap-2 mt-3">
+                    <button className="btn btn-sm btn-outline-primary" onClick={() => handleEditar(tarefa.id)}>Editar</button>
+                    <button className="btn btn-sm btn-outline-danger" onClick={() => handleExcluir(tarefa.id)}>Excluir</button>
                   </div>
                 </div>
-              );
-            })
-          ) : (
-            <p className="text-white text-center">Nenhuma tarefa encontrada.</p>
-          )}
-        </div>
-      </section>
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-white text-center">Nenhuma tarefa encontrada.</p>
+        )}
+      </div>
+    </section >
 
       <Rodape />
 
-      {mostrarModalConfirmacao && (
-        <Modal
-          titulo="Confirmar Exclusão"
-          texto="Deseja realmente excluir esta tarefa?"
-          txtBtn1="Sim, excluir"
-          txtBtn2="Cancelar"
-          onClickBtn1={confirmarExclusao}
-          onClickBtn2={() => setMostrarModalConfirmacao(false)}
-          onClickBtnClose={() => setMostrarModalConfirmacao(false)}
-        />
-      )}
+  {
+    mostrarModalConfirmacao && (
+      <Modal
+        titulo="Confirmar Exclusão"
+        texto="Deseja realmente excluir esta tarefa?"
+        txtBtn1="Sim, excluir"
+        txtBtn2="Cancelar"
+        onClickBtn1={confirmarExclusao}
+        onClickBtn2={() => setMostrarModalConfirmacao(false)}
+        onClickBtnClose={() => setMostrarModalConfirmacao(false)}
+      />
+    )
+  }
 
-      {mostrarModalSucesso && (
-        <Modal
-          titulo="Tarefa Excluída"
-          texto="A tarefa foi excluída com sucesso!"
-          txtBtn1="OK"
-          onClickBtn1={() => setMostrarModalSucesso(false)}
-        />
-      )}
+  {
+    mostrarModalSucesso && (
+      <Modal
+        titulo="Tarefa Excluída"
+        texto="A tarefa foi excluída com sucesso!"
+        txtBtn1="OK"
+        onClickBtn1={() => setMostrarModalSucesso(false)}
+      />
+    )
+  }
     </>
   );
 };

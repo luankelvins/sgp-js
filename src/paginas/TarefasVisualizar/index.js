@@ -92,17 +92,13 @@ const ListaTarefas = () => {
   
     const dataAtual = new Date().toLocaleString();
   
-    // Adiciona a logomarca (ajuste se necessário)
     const img = new Image();
     img.src = logo;
     img.onload = () => {
-      doc.addImage(img, "PNG", 10, 10, 30, 30);
+      doc.addImage(img, "PNG", 10, 10, 20, 20);
   
       doc.setFontSize(18);
       doc.text("Relatório de Tarefas", 105, 20, { align: "center" });
-  
-      doc.setFontSize(10);
-      doc.text(`Exportado em: ${dataAtual}`, 200, 10, { align: "right" });
   
       const colunas = [
         "Título",
@@ -135,6 +131,9 @@ const ListaTarefas = () => {
           doc.text(`Página ${doc.internal.getCurrentPageInfo().pageNumber} de ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
         },
       });
+
+      doc.setFontSize(10);
+      doc.text(`Exportado em: ${dataAtual}`, data.settings.margin.rigth, doc.internal.pageSize.height - 10, 200, 10, { align: "right" });
   
       doc.save("relatorio_tarefas.pdf");
     };

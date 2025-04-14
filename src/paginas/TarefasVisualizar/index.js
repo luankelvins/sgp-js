@@ -88,52 +88,73 @@ const ListaTarefas = () => {
   };
 
   const handleExportarPdf = () => {
-    const doc = new jsPDF();
+    const doc = new jsPDF("p", "mm", "a4");
+    const dataAtual = new Date().toLocaleString("pt-BR");
   
-    const dataAtual = new Date().toLocaleString();
+    const paginaLargura = doc.internal.pageSize.getWidth();
+    const paginaAltura = doc.internal.pageSize.getHeight();
   
     const img = new Image();
     img.src = logo;
+  
     img.onload = () => {
-      doc.addImage(img, "PNG", 10, 10, 20, 20);
+      // Logomarca
+      doc.addImage(img, "PNG", 10, 10, 25, 25);
   
+      // Título centralizado
       doc.setFontSize(18);
-      doc.text("Relatório de Tarefas", 105, 20, { align: "center" });
+      doc.setTextColor(13, 27, 42); // cor parecida com o fundo da página
+      doc.text("RELATÓRIO DE TAREFAS", paginaLargura / 2, 20, { align: "center" });
   
-      const colunas = [
-        "Título",
-        "Status",
-        "Prioridade",
-        "Projeto",
-        "Responsável",
-        "Criação",
-        "Conclusão",
-      ];
+      doc.setFontSize(12);
+      doc.setTextColor(80);
+      doc.text("Sistema de Gerenciamento", paginaLargura / 2, 28, { align: "center" });
   
-      const linhas = tarefas.map((t) => [
-        t.titulo,
-        t.status,
-        t.prioridade,
-        t.projeto?.nome || "-",
-        t.usuario?.nome || "-",
-        t.dataCriacao || "-",
-        t.dataConclusao || "-",
-      ]);
-  
+      // Espaço para tabela
       autoTable(doc, {
-        head: [colunas],
-        body: linhas,
-        startY: 50,
-        styles: { fontSize: 9 },
+        startY: 40,
+        head: [[
+          "Título",
+          "Status",
+          "Prioridade",
+          "Projeto",
+          "Responsável",
+          "Criação",
+          "Conclusão",
+        ]],
+        body: tarefas.map((t) => [
+          t.titulo,
+          t.status,
+          t.prioridade,
+          t.projeto?.nome || "-",
+          t.usuario?.nome || "-",
+          t.dataCriacao || "-",
+          t.dataConclusao || "-",
+        ]),
+        styles: {
+          fontSize: 9,
+          cellPadding: 3,
+          valign: "middle",
+        },
+        headStyles: {
+          fillColor: [13, 27, 42],
+          textColor: 255,
+          fontStyle: "bold",
+        },
+        alternateRowStyles: {
+          fillColor: [240, 240, 240],
+        },
         didDrawPage: (data) => {
-          const pageCount = doc.internal.getNumberOfPages();
-          doc.setFontSize(8);
-          doc.text(`Página ${doc.internal.getCurrentPageInfo().pageNumber} de ${pageCount}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
+          // Número da página no rodapé (centro)
+          const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
+          doc.setFontSize(9);
+          doc.setTextColor(100);
+          doc.text(`Página ${pageNumber}`, paginaLargura / 2, paginaAltura - 10, { align: "center" });
+  
+          // Data de exportação no canto inferior direito
+          doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 10, paginaAltura - 10, { align: "right" });
         },
       });
-
-      doc.setFontSize(10);
-      doc.text(`Exportado em: ${dataAtual}`, doc.internal.pageSize.height - 10, 200, 10, { align: "right" });
   
       doc.save("relatorio_tarefas.pdf");
     };

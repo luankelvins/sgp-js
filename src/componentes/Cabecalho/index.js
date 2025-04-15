@@ -20,7 +20,7 @@ function Cabecalho() {
   };
 
   const confirmarLogout = () => {
-    localStorage.removeItem("usuario"); n
+    localStorage.removeItem("usuario"); 
     navigate("/");
   };
 

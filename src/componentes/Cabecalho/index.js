@@ -21,7 +21,7 @@ function Cabecalho() {
   };
 
   const confirmarLogout = () => {
-    localStorage.removeItem("usuario"); 
+    localStorage.removeItem("usuario");
     navigate("/");
   };
 
@@ -60,12 +60,19 @@ function Cabecalho() {
 
             <div className="d-flex align-items-center gap-3">
               {usuarioLogado && (
-                <div className="dropdown">
+                <div className="dropdown d-flex align-items-center gap-2">
+                  {/* Nome do usuário */}
+                  <span className="fw-semibold text-dark">
+                    {usuarioLogado.nome}
+                  </span>
+
+                  {/* Botão do dropdown com a imagem */}
                   <button
                     className="btn dropdown-toggle p-0 border-0 bg-transparent"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
+                    style={{ display: "flex", alignItems: "center" }}
                   >
                     <img
                       src={usuarioLogado.foto || favicon}
@@ -75,6 +82,8 @@ function Cabecalho() {
                       height="40"
                     />
                   </button>
+
+                  {/* Menu dropdown */}
                   <ul
                     className="dropdown-menu dropdown-menu-end shadow"
                     style={{

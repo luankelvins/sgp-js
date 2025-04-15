@@ -36,7 +36,7 @@ const EasterEgg = ({ ativar }) => {
 
   if (!ativado) return null;
 
-  return <ModalEspalhafatoso onClose={handleFecharModal} />;
+  return <ModalEspalhafatoso onClose={handleFecharModal} animar />;
 };
 
 export default EasterEgg;

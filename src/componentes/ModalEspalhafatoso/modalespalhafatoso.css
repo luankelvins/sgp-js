@@ -85,3 +85,23 @@
     75% { color: #0ff; }
     100% { color: #f0f; }
   }
+
+  .easter-modal-border {
+    padding: 8px;
+    border-radius: 20px;
+    background: conic-gradient(
+      from 0deg,
+      red,
+      orange,
+      yellow,
+      green,
+      cyan,
+      blue,
+      violet,
+      red
+    );
+  }
+  
+  .easter-animando {
+    animation: spin-border 4s linear infinite;
+  }

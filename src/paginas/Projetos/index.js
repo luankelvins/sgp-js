@@ -67,41 +67,46 @@ function ListarProjetos() {
       alert("Nenhum projeto para exportar.");
       return;
     }
-
+  
     const doc = new jsPDF("p", "mm", "a4");
     const dataAtual = new Date().toLocaleString("pt-BR");
     const paginaLargura = doc.internal.pageSize.getWidth();
     const paginaAltura = doc.internal.pageSize.getHeight();
-
-    // Logomarca (250px ≈ 66mm de largura), alinhada à esquerda
-    doc.addImage(logo, "PNG", 14, 10, 66, 20); // x: 14mm, y: 10mm, largura: 66mm, altura proporcional
-
-    // Título centralizado
+  
+    // Logomarca à esquerda (66mm largura ~ 250px), altura proporcional
+    const logoWidth = 66;
+    const logoHeight = 25;
+    const logoX = 14;
+    const logoY = 10;
+    doc.addImage(logo, "PNG", logoX, logoY, logoWidth, logoHeight);
+  
+    // Título e subtítulo alinhados à direita da logo
+    const textoX = logoX + logoWidth + 10; // espaçamento entre logo e texto
+  
     doc.setFontSize(18);
     doc.setTextColor(13, 27, 42);
-    doc.text("RELATÓRIO DE PROJETOS", paginaLargura / 2, 20, { align: "center" });
-
-    // Subtítulo centralizado
+    doc.text("RELATÓRIO DE PROJETOS", textoX, 18, { align: "left" });
+  
     doc.setFontSize(11);
     doc.setTextColor(90);
-    doc.text("Sistema de Gerenciamento de Projetos", paginaLargura / 2, 28, { align: "center" });
-
-    let startY = 80;
-
+    doc.text("Sistema de Gerenciamento de Projetos", textoX, 26, { align: "left" });
+  
+    let startY = 50;
+  
     projetos.forEach((projeto) => {
       const tarefasDoProjeto = tarefas.filter((t) => t.projeto?.id === projeto.id);
-
+  
       // Nome do projeto
       doc.setFontSize(13);
       doc.setTextColor(0);
       doc.text(`Projeto: ${projeto.nome}`, 14, startY);
-
+  
       doc.setFontSize(10);
       doc.text(`Descrição: ${projeto.descricao || "-"}`, 14, startY + 6);
       doc.text(`Responsável: ${projeto.responsavel?.nome || "-"}`, 14, startY + 12);
-
+  
       startY += 20;
-
+  
       if (tarefasDoProjeto.length > 0) {
         autoTable(doc, {
           startY: startY,
@@ -135,7 +140,7 @@ function ListarProjetos() {
             fillColor: [245, 245, 245],
           },
           margin: { left: 14, right: 14 },
-          didDrawPage: (data) => {
+          didDrawPage: () => {
             const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
             doc.setFontSize(9);
             doc.setTextColor(100);
@@ -143,7 +148,7 @@ function ListarProjetos() {
             doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 14, paginaAltura - 10, { align: "right" });
           },
         });
-
+  
         startY = doc.lastAutoTable.finalY + 12;
       } else {
         doc.setFontSize(10);
@@ -152,7 +157,7 @@ function ListarProjetos() {
         startY += 12;
       }
     });
-
+  
     doc.save("relatorio_projetos.pdf");
   };
 

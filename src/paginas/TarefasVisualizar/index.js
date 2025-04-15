@@ -8,7 +8,7 @@ import { listarTarefas, excluirTarefa } from "../../servicos/tarefas";
 import { FaFilePdf } from "react-icons/fa";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import logo from "../../assets/sgp_logo_horizontal.png"; 
+import logo from "../../assets/sgp_logo_horizontal.png";
 
 const ListaTarefas = () => {
   const navigate = useNavigate();
@@ -98,21 +98,27 @@ const ListaTarefas = () => {
     const paginaLargura = doc.internal.pageSize.getWidth();
     const paginaAltura = doc.internal.pageSize.getHeight();
 
-    // Logo
-    doc.addImage(logo, "PNG", 10, 10, 25, 25);
+    // Logomarca (250px ≈ 66mm de largura), alinhada à esquerda
+    const logoWidth = 66;
+    const logoHeight = 25;
+    const logoX = 14;
+    const logoY = 10;
+    doc.addImage(logo, "PNG", logoX, logoY, logoWidth, logoHeight);
 
-    // Título
+    // Título e subtítulo alinhados à direita da logomarca
+    const textoX = logoX + logoWidth + 10;
+
     doc.setFontSize(18);
     doc.setTextColor(13, 27, 42);
-    doc.text("RELATÓRIO DE TAREFAS", paginaLargura / 2, 20, { align: "center" });
+    doc.text("RELATÓRIO DE TAREFAS", textoX, 18, { align: "left" });
 
-    doc.setFontSize(12);
-    doc.setTextColor(80);
-    doc.text("Sistema de Gerenciamento", paginaLargura / 2, 28, { align: "center" });
+    doc.setFontSize(11);
+    doc.setTextColor(90);
+    doc.text("Sistema de Gerenciamento", textoX, 26, { align: "left" });
 
-    // Tabela
+    // Tabela com as tarefas
     autoTable(doc, {
-      startY: 40,
+      startY: 50,
       head: [[
         "Título",
         "Status",
@@ -144,12 +150,13 @@ const ListaTarefas = () => {
       alternateRowStyles: {
         fillColor: [240, 240, 240],
       },
-      didDrawPage: (data) => {
+      margin: { left: 14, right: 14 },
+      didDrawPage: () => {
         const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
         doc.setFontSize(9);
         doc.setTextColor(100);
         doc.text(`Página ${pageNumber}`, paginaLargura / 2, paginaAltura - 10, { align: "center" });
-        doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 10, paginaAltura - 10, { align: "right" });
+        doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 14, paginaAltura - 10, { align: "right" });
       },
     });
 
@@ -159,10 +166,10 @@ const ListaTarefas = () => {
   return (
     <>
       <Cabecalho />
-  
+
       <section style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <div className="container py-5">
-  
+
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="text-white fw-bold mb-0">Lista de Tarefas</h2>
             <div className="d-flex gap-2">
@@ -178,7 +185,7 @@ const ListaTarefas = () => {
               </button>
             </div>
           </div>
-  
+
           <div className="row g-3 mb-4 text-white">
             <div className="col-md-4">
               <label>Status</label>
@@ -222,7 +229,7 @@ const ListaTarefas = () => {
               </select>
             </div>
           </div>
-  
+
           <div className="d-flex flex-wrap justify-content-end gap-2 mb-4">
             <button className="btn btn-primary btn-sm" onClick={aplicarFiltros}>
               Filtrar
@@ -231,7 +238,7 @@ const ListaTarefas = () => {
               Limpar
             </button>
           </div>
-  
+
           {tarefas.length > 0 ? (
             tarefas.map((tarefa) => {
               const tempoGasto = (() => {
@@ -245,7 +252,7 @@ const ListaTarefas = () => {
                 }
                 return null;
               })();
-  
+
               return (
                 <div key={tarefa.id} className="card mb-4 shadow-sm border-0">
                   <div className="card-body">
@@ -258,7 +265,7 @@ const ListaTarefas = () => {
                     <p><strong>Projeto:</strong> {tarefa.projeto?.nome || "-"}</p>
                     <p><strong>Responsável:</strong> {tarefa.usuario?.nome || "-"}</p>
                     {tempoGasto && <p><strong>Tempo Gasto:</strong> {tempoGasto}</p>}
-  
+
                     <div className="d-flex justify-content-end gap-2 mt-3">
                       <button className="btn btn-sm btn-outline-primary" onClick={() => handleEditar(tarefa.id)}>
                         Editar
@@ -276,9 +283,9 @@ const ListaTarefas = () => {
           )}
         </div> {/* <- FECHAMENTO DA DIV "container" */}
       </section>
-  
+
       <Rodape />
-  
+
       {mostrarModalConfirmacao && (
         <Modal
           titulo="Confirmar Exclusão"
@@ -290,7 +297,7 @@ const ListaTarefas = () => {
           onClickBtnClose={() => setMostrarModalConfirmacao(false)}
         />
       )}
-  
+
       {mostrarModalSucesso && (
         <Modal
           titulo="Tarefa Excluída"

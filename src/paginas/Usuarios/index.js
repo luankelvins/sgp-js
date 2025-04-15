@@ -60,27 +60,36 @@ function Usuarios() {
 
   const handleExportarPdf = () => {
     if (usuarios.length === 0) {
-      alert("Nenhuma tarefa para exportar.");
+      alert("Nenhum usuário para exportar.");
       return;
     }
-
+  
     const doc = new jsPDF("p", "mm", "a4");
     const dataAtual = new Date().toLocaleString("pt-BR");
     const paginaLargura = doc.internal.pageSize.getWidth();
     const paginaAltura = doc.internal.pageSize.getHeight();
-
-    doc.addImage(logo, "PNG", 10, 10, 25, 25);
-
+  
+    // Logomarca à esquerda (250px ≈ 66mm de largura)
+    const logoWidth = 66;
+    const logoHeight = 25;
+    const logoX = 14;
+    const logoY = 10;
+    doc.addImage(logo, "PNG", logoX, logoY, logoWidth, logoHeight);
+  
+    // Título e subtítulo à direita da logomarca
+    const textoX = logoX + logoWidth + 10;
+  
     doc.setFontSize(18);
     doc.setTextColor(13, 27, 42);
-    doc.text("RELATÓRIO DE TAREFAS", paginaLargura / 2, 20, { align: "center" });
-
-    doc.setFontSize(12);
-    doc.setTextColor(80);
-    doc.text("Sistema de Gerenciamento", paginaLargura / 2, 28, { align: "center" });
-
+    doc.text("RELATÓRIO DE USUÁRIOS", textoX, 18, { align: "left" });
+  
+    doc.setFontSize(11);
+    doc.setTextColor(90);
+    doc.text("Sistema de Gerenciamento", textoX, 26, { align: "left" });
+  
+    // Tabela de usuários
     autoTable(doc, {
-      startY: 40,
+      startY: 50,
       head: [[
         "ID",
         "Nome",
@@ -89,14 +98,13 @@ function Usuarios() {
         "Idade",
         "Status",
       ]],
-      body: usuarios.map((t) => [
-        t.id,
-        t.nome,
-        t.cpf,
-        t.email || "-",
-        calcularIdade(t.dataNascimento),
-        t.status || "-",
-
+      body: usuarios.map((u) => [
+        u.id,
+        u.nome,
+        u.cpf,
+        u.email || "-",
+        calcularIdade(u.dataNascimento),
+        u.status || "-",
       ]),
       styles: {
         fontSize: 9,
@@ -111,18 +119,19 @@ function Usuarios() {
       alternateRowStyles: {
         fillColor: [240, 240, 240],
       },
-      didDrawPage: (data) => {
+      margin: { left: 14, right: 14 },
+      didDrawPage: () => {
         const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
         doc.setFontSize(9);
         doc.setTextColor(100);
         doc.text(`Página ${pageNumber}`, paginaLargura / 2, paginaAltura - 10, { align: "center" });
-        doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 10, paginaAltura - 10, { align: "right" });
+        doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 14, paginaAltura - 10, { align: "right" });
       },
     });
-
-    doc.save("relação de usuários.pdf");
+  
+    doc.save("relatorio_usuarios.pdf");
   };
-
+  
   return (
     <>
       <Cabecalho />

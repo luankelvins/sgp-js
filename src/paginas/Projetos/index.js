@@ -7,7 +7,7 @@ import { listarProjetos, excluirProjeto } from "../../servicos/projetos";
 import { listarTarefas } from "../../servicos/tarefas";
 import logo from "../../assets/sgp_logo_horizontal.png";
 import jsPDF from "jspdf";
-import { FaFilePdf } from "react-icons/fa6";
+import { FaFilePdf } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 
 

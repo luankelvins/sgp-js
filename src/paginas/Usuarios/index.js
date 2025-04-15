@@ -5,6 +5,10 @@ import Rodape from "../../componentes/Rodape";
 import Modal from "../../componentes/Modal";
 import { listarUsuarios, excluirUsuario } from "../../servicos/usuarios";
 import { calcularIdade } from "../../utils/idade";
+import autoTable from "jspdf-autotable";
+import jsPDF from "jspdf";
+import logo from "../../assets/sgp_logo_horizontal.png";
+import { FaFilePdf } from "react-icons/fa6";
 
 function Usuarios() {
   const navigate = useNavigate();
@@ -54,6 +58,71 @@ function Usuarios() {
     }
   };
 
+  const handleExportarPdf = () => {
+    if (tarefas.length === 0) {
+      alert("Nenhuma tarefa para exportar.");
+      return;
+    }
+
+    const doc = new jsPDF("p", "mm", "a4");
+    const dataAtual = new Date().toLocaleString("pt-BR");
+    const paginaLargura = doc.internal.pageSize.getWidth();
+    const paginaAltura = doc.internal.pageSize.getHeight();
+
+    doc.addImage(logo, "PNG", 10, 10, 25, 25);
+
+    doc.setFontSize(18);
+    doc.setTextColor(13, 27, 42);
+    doc.text("RELATÓRIO DE TAREFAS", paginaLargura / 2, 20, { align: "center" });
+
+    doc.setFontSize(12);
+    doc.setTextColor(80);
+    doc.text("Sistema de Gerenciamento", paginaLargura / 2, 28, { align: "center" });
+
+    autoTable(doc, {
+      startY: 40,
+      head: [[
+        "ID",
+        "Nome",
+        "CPF",
+        "Email",
+        "Idade",
+        "Status",
+      ]],
+      body: usuarios.map((t) => [
+        t.titulo,
+        t.status,
+        t.prioridade,
+        t.projeto?.nome || "-",
+        t.usuario?.nome || "-",
+        t.dataCriacao || "-",
+        t.dataConclusao || "-",
+      ]),
+      styles: {
+        fontSize: 9,
+        cellPadding: 3,
+        valign: "middle",
+      },
+      headStyles: {
+        fillColor: [13, 27, 42],
+        textColor: 255,
+        fontStyle: "bold",
+      },
+      alternateRowStyles: {
+        fillColor: [240, 240, 240],
+      },
+      didDrawPage: (data) => {
+        const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
+        doc.setFontSize(9);
+        doc.setTextColor(100);
+        doc.text(`Página ${pageNumber}`, paginaLargura / 2, paginaAltura - 10, { align: "center" });
+        doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 10, paginaAltura - 10, { align: "right" });
+      },
+    });
+
+    doc.save("relatorio_tarefas.pdf");
+  };
+
   return (
     <>
       <Cabecalho />
@@ -61,7 +130,14 @@ function Usuarios() {
         <section className="container py-5">
           <div className="d-flex justify-content-between align-items-center mb-4">
             <h2 className="text-white fw-bold">Usuários Cadastrados</h2>
-            <button className="btn btn-success btn-lg" onClick={handleAdicionar}>
+            <button
+              className="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
+              onClick={handleExportarPdf}
+            >
+              <FaFilePdf />
+              Exportar PDF
+            </button>
+            <button className="btn btn-success btn-sm" onClick={handleAdicionar}>
               + Novo Usuário
             </button>
           </div>

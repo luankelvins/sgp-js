@@ -5,6 +5,11 @@ import Cabecalho from "../../componentes/Cabecalho";
 import Rodape from "../../componentes/Rodape";
 import { listarProjetos, excluirProjeto } from "../../servicos/projetos";
 import { listarTarefas } from "../../servicos/tarefas";
+import logo from "../../assets/sgp_logo_horizontal.png";
+import jsPDF from "jspdf";
+import { FaFilePdf } from "react-icons/fa6";
+import autoTable from "jspdf-autotable";
+
 
 function ListarProjetos() {
   const navigate = useNavigate();
@@ -57,15 +62,114 @@ function ListarProjetos() {
     return tarefas.filter((t) => t.projeto?.id === projetoId);
   };
 
+  const handleExportarPdf = () => {
+    if (projetos.length === 0) {
+      alert("Nenhum projeto para exportar.");
+      return;
+    }
+  
+    const doc = new jsPDF("p", "mm", "a4");
+    const dataAtual = new Date().toLocaleString("pt-BR");
+    const paginaLargura = doc.internal.pageSize.getWidth();
+    const paginaAltura = doc.internal.pageSize.getHeight();
+  
+    // Logomarca
+    doc.addImage(logo, "PNG", 10, 10, 25, 25);
+  
+    // Título
+    doc.setFontSize(18);
+    doc.setTextColor(13, 27, 42);
+    doc.text("RELATÓRIO DE PROJETOS", paginaLargura / 2, 20, { align: "center" });
+  
+    doc.setFontSize(12);
+    doc.setTextColor(80);
+    doc.text("Sistema de Gerenciamento", paginaLargura / 2, 28, { align: "center" });
+  
+    let startY = 40;
+  
+    projetos.forEach((projeto, index) => {
+      const tarefasDoProjeto = tarefas.filter((t) => t.projeto?.id === projeto.id);
+  
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+      doc.text(`Projeto: ${projeto.nome}`, 14, startY);
+      doc.setFontSize(10);
+      doc.text(`Descrição: ${projeto.descricao || "-"}`, 14, startY + 6);
+      doc.text(`Responsável: ${projeto.responsavel?.nome || "-"}`, 14, startY + 12);
+  
+      startY += 20;
+  
+      autoTable(doc, {
+        startY: startY,
+        head: [[
+          "ID",
+          "Título",
+          "Descrição",
+          "Responsável",
+          "Criação",
+          "Status"
+        ]],
+        body: tarefasDoProjeto.map((t) => [
+          t.id,
+          t.titulo,
+          t.descricao || "-",
+          t.usuario?.nome || "-",
+          t.dataCriacao || "-",
+          t.status || "-"
+        ]),
+        styles: {
+          fontSize: 9,
+          cellPadding: 3,
+          valign: "middle",
+        },
+        headStyles: {
+          fillColor: [13, 27, 42],
+          textColor: 255,
+          fontStyle: "bold",
+        },
+        alternateRowStyles: {
+          fillColor: [240, 240, 240],
+        },
+        margin: { left: 14, right: 14 },
+        didDrawPage: (data) => {
+          const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
+          doc.setFontSize(9);
+          doc.setTextColor(100);
+          doc.text(`Página ${pageNumber}`, paginaLargura / 2, paginaAltura - 10, { align: "center" });
+          doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 10, paginaAltura - 10, { align: "right" });
+        },
+        willDrawCell: function (data) {
+          // Add spacing between tables
+          if (data.row.index === tarefasDoProjeto.length - 1) {
+            startY = data.cursor.y + 10;
+          }
+        },
+      });
+    });
+  
+    doc.save("relatorio_projetos.pdf");
+  };
+
   return (
     <>
       <Cabecalho />
       <div style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <section className="container py-5">
-          <div className="d-flex justify-content-end mb-4">
-            <button className="btn btn-success btn-lg" onClick={() => navigate("/projetos/novo")}>
-              + Novo Projeto
-            </button>
+          <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <h2 className="text-white fw-bold mb-0">Projetos Cadastrados</h2>
+
+            <div className="d-flex gap-2">
+              <button
+                className="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
+                onClick={handleExportarPdf}
+              >
+                <FaFilePdf />
+                Exportar PDF
+              </button>
+              <button className="btn btn-success btn-sm" onClick={() => navigate("/projetos/novo")}>
+                + Novo Projeto
+              </button>
+            </div>
           </div>
 
           {carregando ? (

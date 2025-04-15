@@ -24,7 +24,7 @@ function Login() {
       const res = await autenticar(email, senha);
       console.log("✅ Usuário autenticado:", res.data);
 
-      login(res.data); // AuthContext
+      login(res.data);
       navigate("/dashboard");
     } catch (erro) {
       console.error("❌ Erro de login:", erro);
@@ -49,7 +49,8 @@ function Login() {
               className="form-control"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.toLowerCase())}
+              style={{ textTransform: "lowercase" }}
               required
             />
             <div id="emailHelp" className="form-text">Nunca compartilhe suas credenciais.</div>

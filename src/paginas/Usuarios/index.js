@@ -128,18 +128,24 @@ function Usuarios() {
       <Cabecalho />
       <div style={{ backgroundColor: "#0d1b2a", minHeight: "100vh" }}>
         <section className="container py-5">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 className="text-white fw-bold">Usuários Cadastrados</h2>
-            <button
-              className="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
-              onClick={handleExportarPdf}
-            >
-              <FaFilePdf />
-              Exportar PDF
-            </button>
-            <button className="btn btn-success btn-sm" onClick={handleAdicionar}>
-              + Novo Usuário
-            </button>
+          <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+            <h2 className="text-white fw-bold mb-0">Usuários Cadastrados</h2>
+
+            <div className="d-flex gap-2">
+              <button
+                className="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
+                onClick={handleExportarPdf}
+              >
+                <FaFilePdf />
+                Exportar PDF
+              </button>
+              <button
+                className="btn btn-success btn-sm"
+                onClick={handleAdicionar}
+              >
+                + Novo Usuário
+              </button>
+            </div>
           </div>
 
           {/* Tabela para desktop */}

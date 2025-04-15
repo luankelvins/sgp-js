@@ -10,25 +10,23 @@ const EasterEgg = ({ ativar }) => {
     if (ativar && !ativado) {
       setAtivado(true);
 
-      // 🎇 Confetes
       confetti({
-        particleCount: 200,
-        spread: 160,
+        particleCount: 250,
+        spread: 180,
         origin: { y: 0.6 },
       });
 
-      // 🔊 Tocar som de fogos (usando o import corretamente)
       const audio = new Audio(fireworks);
-      audio.volume = 0.6;
+      audio.volume = 0.7;
       audio.play().catch((err) => {
-        console.warn("Erro ao tentar tocar o som:", err);
+        console.warn("Erro ao tocar som:", err);
       });
     }
   }, [ativar, ativado]);
 
   if (!ativado) return null;
 
-  return <ModalEspalhafatoso onClose={() => setAtivado(false)} />;
+  return <ModalEspalhafatoso />;
 };
 
 export default EasterEgg;

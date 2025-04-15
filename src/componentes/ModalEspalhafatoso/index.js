@@ -1,6 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import "../ModalEspalhafatoso/modalespalhafatoso.css";
 
-function ModalEspalhafatoso({ onClose }) {
+function ModalEspalhafatoso() {
+  const navigate = useNavigate();
+
+  const handleFechar = () => {
+    navigate(-1); // volta para a página anterior
+  };
+
   return (
     <div className="easter-overlay">
       <div className="easter-modal-border">
@@ -12,7 +19,7 @@ function ModalEspalhafatoso({ onClose }) {
             Parabéns! Você desbloqueou um segredo escondido no sistema.
           </p>
 
-          <button className="easter-btn" onClick={onClose}>
+          <button className="easter-btn" onClick={handleFechar}>
             Fechar
           </button>
         </div>

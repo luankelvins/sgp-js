@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/sgp_logo_horizontal.png';
 import Modal from "../Modal";
+import favicon from "../../../public/favicon.png";
 
 function Cabecalho() {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ function Cabecalho() {
                     aria-expanded="false"
                   >
                     <img
-                      src={usuarioLogado.foto || logo}
+                      src={usuarioLogado.foto || favicon}
                       alt="Perfil"
                       className="rounded-circle"
                       width="40"

@@ -60,19 +60,12 @@ function Cabecalho() {
 
             <div className="d-flex align-items-center gap-3">
               {usuarioLogado && (
-                <div className="dropdown d-flex align-items-center gap-2">
-                  {/* Nome do usuário */}
-                  <span className="fw-semibold text-dark">
-                    {usuarioLogado.nome}
-                  </span>
-
-                  {/* Botão do dropdown com a imagem */}
+                <div className="dropdown">
                   <button
-                    className="btn dropdown-toggle p-0 border-0 bg-transparent"
+                    className="btn dropdown-toggle d-flex align-items-center gap-2 p-2 bg-light border rounded shadow-sm"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
-                    style={{ display: "flex", alignItems: "center" }}
                   >
                     <img
                       src={usuarioLogado.foto || favicon}
@@ -81,9 +74,11 @@ function Cabecalho() {
                       width="40"
                       height="40"
                     />
+                    <span className="fw-semibold text-dark text-start" style={{ whiteSpace: "nowrap" }}>
+                      {usuarioLogado.nome}
+                    </span>
                   </button>
 
-                  {/* Menu dropdown */}
                   <ul
                     className="dropdown-menu dropdown-menu-end shadow"
                     style={{

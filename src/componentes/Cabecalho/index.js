@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/sgp_logo_horizontal.png';
 import Modal from "../Modal";
-import favicon from "../../../public/favicon.png";
+import favicon from "../../assets/treina_recife_miniatura.png";
 
 function Cabecalho() {
   const navigate = useNavigate();

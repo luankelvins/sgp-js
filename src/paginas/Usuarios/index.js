@@ -59,7 +59,7 @@ function Usuarios() {
   };
 
   const handleExportarPdf = () => {
-    if (tarefas.length === 0) {
+    if (usuarios.length === 0) {
       alert("Nenhuma tarefa para exportar.");
       return;
     }
@@ -86,17 +86,17 @@ function Usuarios() {
         "Nome",
         "CPF",
         "Email",
-        "Idade",
+        "Data de Nascimento",
         "Status",
       ]],
       body: usuarios.map((t) => [
-        t.titulo,
-        t.status,
-        t.prioridade,
-        t.projeto?.nome || "-",
-        t.usuario?.nome || "-",
-        t.dataCriacao || "-",
-        t.dataConclusao || "-",
+        t.id,
+        t.nome,
+        t.cpf,
+        t.email || "-",
+        t.dataNascimento || "-",
+        t.status || "-",
+        
       ]),
       styles: {
         fontSize: 9,

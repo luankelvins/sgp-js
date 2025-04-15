@@ -86,7 +86,7 @@ function Usuarios() {
         "Nome",
         "CPF",
         "Email",
-        "Data de Nascimento",
+        "Idade",
         "Status",
       ]],
       body: usuarios.map((t) => [
@@ -94,9 +94,9 @@ function Usuarios() {
         t.nome,
         t.cpf,
         t.email || "-",
-        t.dataNascimento || "-",
+        calcularIdade(t.dataNascimento),
         t.status || "-",
-        
+
       ]),
       styles: {
         fontSize: 9,

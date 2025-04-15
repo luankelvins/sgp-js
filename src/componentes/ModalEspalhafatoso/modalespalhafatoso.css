@@ -1,0 +1,87 @@
+.easter-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 15, 15, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    overflow: hidden;
+  }
+  
+  .easter-modal-border {
+    padding: 8px;
+    border-radius: 20px;
+    background: conic-gradient(
+      from 0deg,
+      red,
+      orange,
+      yellow,
+      green,
+      cyan,
+      blue,
+      violet,
+      red
+    );
+    animation: spin-border 4s linear infinite;
+  }
+  
+  .easter-modal-content {
+    background: #111;
+    border-radius: 16px;
+    padding: 40px 60px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .brownie-img {
+    width: 180px;
+    height: auto;
+    animation: pulse 1.5s infinite;
+    filter: drop-shadow(0 0 12px #fff);
+  }
+  
+  .easter-btn {
+    margin-top: 20px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes spin-border {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.9; }
+  }
+
+  .easter-mensagem {
+    color: white;
+    margin-top: 20px;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px #000;
+    animation: textoColorido 3s ease-in-out infinite;
+  }
+  
+  @keyframes textoColorido {
+    0% { color: #f00; }
+    25% { color: #ff0; }
+    50% { color: #0f0; }
+    75% { color: #0ff; }
+    100% { color: #f0f; }
+  }

@@ -9,6 +9,7 @@ function ModalEspalhafatoso({ onClose }) {
           <p className="easter-subtexto">
             Parabéns! Você desbloqueou um segredo escondido no sistema.
           </p>
+          <h2 className="easter-mensagem"> Ganhou um BROWNIE !! </h2>
 
           <button className="easter-btn" onClick={onClose}>
             Fechar

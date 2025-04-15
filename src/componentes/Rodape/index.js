@@ -17,12 +17,12 @@ function Rodape() {
           <span
             onClick={handleClickEasterEgg}
             style={{
-              cursor: "default",        // <- não mostra que é clicável
-              userSelect: "none",       // <- não deixa selecionar
-              fontWeight: "inherit",    // <- mantém visual normal
-              color: "inherit",         // <- usa a cor do texto normal
+              cursor: "default",
+              userSelect: "none",
+              fontWeight: "inherit",
+              color: "inherit",
             }}
-            title="" // <- sem dica, escondido mesmo
+            title=""
           >
             Treina Recife
           </span>{" "}
@@ -45,8 +45,11 @@ function Rodape() {
         </ul>
       </footer>
 
-      {/* AQUI está o componente que faltava renderizar */}
-      <EasterEgg ativar={ativarEasterEgg} />
+      {/* Easter egg ativado por clique e fechado via onClose */}
+      <EasterEgg
+        ativar={ativarEasterEgg}
+        onClose={() => setAtivarEasterEgg(false)}
+      />
     </div>
   );
 }

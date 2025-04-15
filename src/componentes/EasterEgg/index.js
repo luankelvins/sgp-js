@@ -3,13 +3,13 @@ import confetti from "canvas-confetti";
 import ModalEspalhafatoso from "../ModalEspalhafatoso";
 import fireworks from "../../assets/sounds/fireworks.mp3";
 
-const EasterEgg = ({ ativar }) => {
-  const [ativado, setAtivado] = useState(false);
+const EasterEgg = ({ ativar, onClose }) => {
   const [audio, setAudio] = useState(null);
+  const [jaAtivado, setJaAtivado] = useState(false);
 
   useEffect(() => {
-    if (ativar && !ativado) {
-      setAtivado(true);
+    if (ativar && !jaAtivado) {
+      setJaAtivado(true);
 
       // 🎆 Confetes
       confetti({
@@ -24,19 +24,20 @@ const EasterEgg = ({ ativar }) => {
       novoAudio.play().catch((err) => console.warn("Erro ao tocar som:", err));
       setAudio(novoAudio);
     }
-  }, [ativar, ativado]);
+  }, [ativar, jaAtivado]);
 
   const handleFecharModal = () => {
     if (audio) {
       audio.pause();
       audio.currentTime = 0;
     }
-    setAtivado(false);
+    setJaAtivado(false);
+    if (onClose) onClose(); // Informa ao pai que deve "desativar"
   };
 
-  if (!ativado) return null;
+  if (!ativar || !jaAtivado) return null;
 
-  return <ModalEspalhafatoso onClose={handleFecharModal} animar />;
+  return <ModalEspalhafatoso onClose={handleFecharModal} />;
 };
 
 export default EasterEgg;

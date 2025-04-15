@@ -16,6 +16,7 @@ function Usuarios() {
   const [carregando, setCarregando] = useState(true);
   const [mostrarModalExcluir, setMostrarModalExcluir] = useState(false);
   const [usuarioParaExcluir, setUsuarioParaExcluir] = useState(null);
+  const [usuariosOriginais, setUsuariosOriginais] = useState([]);
   const [filtroNome, setFiltroNome] = useState("");
   const [filtroCpf, setFiltroCpf] = useState("");
   const [filtroEmail, setFiltroEmail] = useState("");
@@ -28,6 +29,7 @@ function Usuarios() {
         if (Array.isArray(resposta.data.content)) {
           const ordenadoPorId = resposta.data.content.sort((a, b) => a.id - b.id);
           setUsuarios(ordenadoPorId);
+          setUsuariosOriginais(ordenadoPorId);
         } else {
           setUsuarios([]);
         }
@@ -136,57 +138,29 @@ function Usuarios() {
     doc.save("relatorio_usuarios.pdf");
   };
 
-  const aplicarFiltros = () => {
-    let listaFiltrada = [...usuarios];
+  useEffect(() => {
+    let listaFiltrada = [...usuariosOriginais];
 
-    if (filtroNome) {
+    if (filtroNome)
       listaFiltrada = listaFiltrada.filter((u) =>
         u.nome.toLowerCase().includes(filtroNome.toLowerCase())
       );
-    }
 
-    if (filtroCpf) {
+    if (filtroCpf)
       listaFiltrada = listaFiltrada.filter((u) =>
         u.cpf.includes(filtroCpf)
       );
-    }
 
-    if (filtroEmail) {
+    if (filtroEmail)
       listaFiltrada = listaFiltrada.filter((u) =>
         u.email.toLowerCase().includes(filtroEmail.toLowerCase())
       );
-    }
 
-    if (filtroStatus) {
-      listaFiltrada = listaFiltrada.filter((u) =>
-        u.status === filtroStatus
-      );
-    }
+    if (filtroStatus)
+      listaFiltrada = listaFiltrada.filter((u) => u.status === filtroStatus);
 
     setUsuarios(listaFiltrada);
-  };
-
-  const limparFiltros = async () => {
-    setFiltroNome("");
-    setFiltroCpf("");
-    setFiltroEmail("");
-    setFiltroStatus("");
-
-    setCarregando(true);
-    try {
-      const resposta = await listarUsuarios();
-      if (Array.isArray(resposta.data.content)) {
-        const ordenado = resposta.data.content.sort((a, b) => a.id - b.id);
-        setUsuarios(ordenado);
-      } else {
-        setUsuarios([]);
-      }
-    } catch (erro) {
-      console.error("Erro ao recarregar usuários:", erro);
-    } finally {
-      setCarregando(false);
-    }
-  };
+  }, [filtroNome, filtroCpf, filtroEmail, filtroStatus, usuariosOriginais]);
 
   return (
     <>
@@ -257,15 +231,6 @@ function Usuarios() {
                   <option value="INATIVO">INATIVO</option>
                 </select>
               </div>
-            </div>
-
-            <div className="d-flex justify-content-end gap-2 mt-3">
-              <button className="btn btn-primary btn-sm" onClick={aplicarFiltros}>
-                Aplicar Filtros
-              </button>
-              <button className="btn btn-secondary btn-sm" onClick={limparFiltros}>
-                Limpar
-              </button>
             </div>
           </div>
 

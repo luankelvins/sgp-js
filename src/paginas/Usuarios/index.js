@@ -8,7 +8,7 @@ import { calcularIdade } from "../../utils/idade";
 import autoTable from "jspdf-autotable";
 import jsPDF from "jspdf";
 import logo from "../../assets/sgp_logo_horizontal.png";
-import { FaFilePdf } from "react-icons/fa6";
+import { FaFilePdf } from "react-icons/fa";
 
 function Usuarios() {
   const navigate = useNavigate();

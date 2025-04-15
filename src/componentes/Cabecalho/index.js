@@ -1,22 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/sgp_logo_horizontal.png';
 import Modal from "../Modal";
-import { LISTA_USUARIOS } from "../../mocks/usuarios";
 
 function Cabecalho() {
   const navigate = useNavigate();
   const [mostrarModalLogout, setMostrarModalLogout] = useState(false);
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
+
+  useEffect(() => {
+    const usuarioSalvo = localStorage.getItem("usuario");
+    if (usuarioSalvo) {
+      setUsuarioLogado(JSON.parse(usuarioSalvo));
+    }
+  }, []);
 
   const handleLogout = () => {
     setMostrarModalLogout(true);
   };
 
   const confirmarLogout = () => {
+    localStorage.removeItem("usuario"); // limpa login
     navigate("/");
   };
-
-  const usuarioLogado = LISTA_USUARIOS[0];
 
   return (
     <>
@@ -52,42 +58,49 @@ function Cabecalho() {
             </ul>
 
             <div className="d-flex align-items-center gap-3">
-              <div className="dropdown">
-                <button
-                  className="btn dropdown-toggle p-0 border-0 bg-transparent"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <img
-                    src={usuarioLogado.foto}
-                    alt="Perfil"
-                    className="rounded-circle"
-                    width="40"
-                    height="40"
-                  />
-                </button>
-                <ul className="dropdown-menu dropdown-menu-end shadow-sm show"
-                  style={{
-                    minWidth: "200px",
-                    padding: "0.5rem 0",
-                    borderRadius: "0.5rem",
-                    overflow: "hidden",
-                    zIndex: 1000
-                  }}
-                >
-                  <li>
-                    <Link className="dropdown-item py-2 px-3" to="/perfil">Perfil</Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item py-2 px-3" to="/seguranca">Segurança</Link>
-                  </li>
-                  <li><hr className="dropdown-divider my-1" /></li>
-                  <li>
-                    <button className="dropdown-item py-2 px-3" onClick={handleLogout}>Logout</button>
-                  </li>
-                </ul>
-              </div>
+              {usuarioLogado && (
+                <div className="dropdown">
+                  <button
+                    className="btn dropdown-toggle p-0 border-0 bg-transparent"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <img
+                      src={usuarioLogado.foto || "https://via.placeholder.com/40"}
+                      alt="Perfil"
+                      className="rounded-circle"
+                      width="40"
+                      height="40"
+                    />
+                  </button>
+                  <ul
+                    className="dropdown-menu dropdown-menu-end shadow"
+                    style={{
+                      minWidth: "180px",
+                      borderRadius: "0.5rem",
+                      padding: "0.5rem 0",
+                    }}
+                  >
+                    <li>
+                      <Link className="dropdown-item py-2 px-3" to="/perfil">
+                        Perfil
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item py-2 px-3" to="/seguranca">
+                        Segurança
+                      </Link>
+                    </li>
+                    <li><hr className="dropdown-divider my-1" /></li>
+                    <li>
+                      <button className="dropdown-item py-2 px-3" onClick={handleLogout}>
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -20,7 +20,7 @@ function Cabecalho() {
   };
 
   const confirmarLogout = () => {
-    localStorage.removeItem("usuario"); // limpa login
+    localStorage.removeItem("usuario"); n
     navigate("/");
   };
 
@@ -67,7 +67,7 @@ function Cabecalho() {
                     aria-expanded="false"
                   >
                     <img
-                      src={usuarioLogado.foto || "https://via.placeholder.com/40"}
+                      src={usuarioLogado.foto || logo}
                       alt="Perfil"
                       className="rounded-circle"
                       width="40"

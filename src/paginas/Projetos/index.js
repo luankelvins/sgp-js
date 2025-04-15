@@ -73,78 +73,83 @@ function ListarProjetos() {
     const paginaLargura = doc.internal.pageSize.getWidth();
     const paginaAltura = doc.internal.pageSize.getHeight();
   
-    // Logomarca
-    doc.addImage(logo, "PNG", 10, 10, 25, 25);
+    // Logomarca (com 250px largura, proporcional na altura)
+    doc.addImage(logo, "PNG", paginaLargura / 2 - 125, 10, 250, 40); // centralizado
   
-    // Título
+    // Título e subtítulo
     doc.setFontSize(18);
     doc.setTextColor(13, 27, 42);
-    doc.text("RELATÓRIO DE PROJETOS", paginaLargura / 2, 20, { align: "center" });
+    doc.text("RELATÓRIO DE PROJETOS", paginaLargura / 2, 60, { align: "center" });
   
-    doc.setFontSize(12);
-    doc.setTextColor(80);
-    doc.text("Sistema de Gerenciamento", paginaLargura / 2, 28, { align: "center" });
+    doc.setFontSize(11);
+    doc.setTextColor(90);
+    doc.text("Sistema de Gerenciamento de Projetos", paginaLargura / 2, 68, { align: "center" });
   
-    let startY = 40;
+    let startY = 80;
   
-    projetos.forEach((projeto, index) => {
+    projetos.forEach((projeto) => {
       const tarefasDoProjeto = tarefas.filter((t) => t.projeto?.id === projeto.id);
   
-      doc.setFontSize(12);
+      // Nome do projeto
+      doc.setFontSize(13);
       doc.setTextColor(0);
       doc.text(`Projeto: ${projeto.nome}`, 14, startY);
+  
       doc.setFontSize(10);
       doc.text(`Descrição: ${projeto.descricao || "-"}`, 14, startY + 6);
       doc.text(`Responsável: ${projeto.responsavel?.nome || "-"}`, 14, startY + 12);
   
       startY += 20;
   
-      autoTable(doc, {
-        startY: startY,
-        head: [[
-          "ID",
-          "Título",
-          "Descrição",
-          "Responsável",
-          "Criação",
-          "Status"
-        ]],
-        body: tarefasDoProjeto.map((t) => [
-          t.id,
-          t.titulo,
-          t.descricao || "-",
-          t.usuario?.nome || "-",
-          t.dataCriacao || "-",
-          t.status || "-"
-        ]),
-        styles: {
-          fontSize: 9,
-          cellPadding: 3,
-          valign: "middle",
-        },
-        headStyles: {
-          fillColor: [13, 27, 42],
-          textColor: 255,
-          fontStyle: "bold",
-        },
-        alternateRowStyles: {
-          fillColor: [240, 240, 240],
-        },
-        margin: { left: 14, right: 14 },
-        didDrawPage: (data) => {
-          const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
-          doc.setFontSize(9);
-          doc.setTextColor(100);
-          doc.text(`Página ${pageNumber}`, paginaLargura / 2, paginaAltura - 10, { align: "center" });
-          doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 10, paginaAltura - 10, { align: "right" });
-        },
-        willDrawCell: function (data) {
-          // Add spacing between tables
-          if (data.row.index === tarefasDoProjeto.length - 1) {
-            startY = data.cursor.y + 10;
-          }
-        },
-      });
+      if (tarefasDoProjeto.length > 0) {
+        autoTable(doc, {
+          startY: startY,
+          head: [[
+            "ID",
+            "Título",
+            "Descrição",
+            "Responsável",
+            "Criação",
+            "Status"
+          ]],
+          body: tarefasDoProjeto.map((t) => [
+            t.id,
+            t.titulo,
+            t.descricao || "-",
+            t.usuario?.nome || "-",
+            t.dataCriacao || "-",
+            t.status || "-"
+          ]),
+          styles: {
+            fontSize: 9,
+            cellPadding: 2.5,
+            valign: "middle",
+          },
+          headStyles: {
+            fillColor: [13, 27, 42],
+            textColor: 255,
+            fontStyle: "bold",
+          },
+          alternateRowStyles: {
+            fillColor: [245, 245, 245],
+          },
+          margin: { left: 14, right: 14 },
+          didDrawPage: (data) => {
+            const pageNumber = doc.internal.getCurrentPageInfo().pageNumber;
+            doc.setFontSize(9);
+            doc.setTextColor(100);
+            doc.text(`Página ${pageNumber}`, paginaLargura / 2, paginaAltura - 10, { align: "center" });
+            doc.text(`Exportado em: ${dataAtual}`, paginaLargura - 14, paginaAltura - 10, { align: "right" });
+          },
+        });
+  
+        startY = doc.lastAutoTable.finalY + 12;
+      } else {
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text("Nenhuma tarefa cadastrada para este projeto.", 14, startY);
+        startY += 12;
+      }
     });
   
     doc.save("relatorio_projetos.pdf");

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
+import ModalEspalhafatoso from "../ModalEspalhafatoso";
+import fireworks from "../../assets/sounds/fireworks.mp3";
 
 const EasterEgg = ({ ativar }) => {
   const [ativado, setAtivado] = useState(false);
@@ -7,17 +9,26 @@ const EasterEgg = ({ ativar }) => {
   useEffect(() => {
     if (ativar && !ativado) {
       setAtivado(true);
-      confetti();
+
+      // 🎇 Confetes
+      confetti({
+        particleCount: 200,
+        spread: 160,
+        origin: { y: 0.6 },
+      });
+
+      // 🔊 Tocar som de fogos (usando o import corretamente)
+      const audio = new Audio(fireworks);
+      audio.volume = 0.6;
+      audio.play().catch((err) => {
+        console.warn("Erro ao tentar tocar o som:", err);
+      });
     }
-  }, [ativar]);
+  }, [ativar, ativado]);
 
   if (!ativado) return null;
 
-  return (
-    <div className="alert alert-success mt-4 text-center fw-bold">
-      🥳 Parabéns! Você encontrou o easter egg escondido no rodapé! 🎁
-    </div>
-  );
+  return <ModalEspalhafatoso onClose={() => setAtivado(false)} />;
 };
 
 export default EasterEgg;

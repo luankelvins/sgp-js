@@ -13,13 +13,15 @@ function Rodape() {
   return (
     <div className="container">
       <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <p
-          className="col-md-4 mb-0 text-body-secondary"
-          style={{ cursor: "pointer" }}
-          onClick={handleClickEasterEgg}
-          title="Clique aqui... se você ousar 🕵️‍♂️"
-        >
-          Treina Recife &copy; {new Date().getFullYear()}
+        <p className="col-md-4 mb-0 text-body-secondary">
+          <span
+            style={{ cursor: "pointer", textDecoration: "underline dotted" }}
+            onClick={handleClickEasterEgg}
+            title="Clique aqui... se você ousar 🕵️"
+          >
+            Treina Recife
+          </span>{" "}
+          &copy; {new Date().getFullYear()}
         </p>
 
         <Link
@@ -38,7 +40,6 @@ function Rodape() {
         </ul>
       </footer>
 
-      <EasterEgg ativar={ativarEasterEgg} />
     </div>
   );
 }

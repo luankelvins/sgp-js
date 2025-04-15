@@ -16,7 +16,7 @@ function Cabecalho() {
     navigate("/");
   };
 
-const usuarioLogado = LISTA_USUARIOS[0];
+  const usuarioLogado = LISTA_USUARIOS[0];
 
   return (
     <>
@@ -67,11 +67,25 @@ const usuarioLogado = LISTA_USUARIOS[0];
                     height="40"
                   />
                 </button>
-                <ul className="dropdown-menu dropdown-menu-end">
-                  <li><Link className="dropdown-item" to="/perfil">Perfil</Link></li>
-                  <li><Link className="dropdown-item" to="/seguranca">Segurança</Link></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
+                <ul className="dropdown-menu dropdown-menu-end shadow-sm show"
+                  style={{
+                    minWidth: "200px",
+                    padding: "0.5rem 0",
+                    borderRadius: "0.5rem",
+                    overflow: "hidden",
+                    zIndex: 1000
+                  }}
+                >
+                  <li>
+                    <Link className="dropdown-item py-2 px-3" to="/perfil">Perfil</Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item py-2 px-3" to="/seguranca">Segurança</Link>
+                  </li>
+                  <li><hr className="dropdown-divider my-1" /></li>
+                  <li>
+                    <button className="dropdown-item py-2 px-3" onClick={handleLogout}>Logout</button>
+                  </li>
                 </ul>
               </div>
             </div>
